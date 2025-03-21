@@ -71,4 +71,3 @@
 * Fuerte en estadistica y académico
 * [Descarga R](https://cran.r-project.org/)
 * [Descarga RStudio](https://posit.co/download/rstudio-desktop/)
-
