@@ -1,0 +1,373 @@
+---
+title: "Transformar datos"
+output:
+   html_document:
+     toc: yes
+     code_folding: show
+     toc_float: yes
+     df_print: paged
+     theme: united
+     code_download: true
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      eval=FALSE)
+options(width = 90)
+library(tidyverse)
+```
+
+<br>
+
+## Tidyverse
+
+Muchas veces los datos que importamos ya están listos para ser explorados y analizados. Otras veces precisan ser manipulados previamente para ello. En estos casos se parte de un dataset “crudo” y se transforma hacia un dataset "analítico". 
+
+`tidyr` y `dplyr` integran parte de la colección de paquetes de `tidyverse` y facilitan la manipulación de los data frames  
+
+<br>
+
+<center>
+![](Figuras/tidyverse-hex.png){width=600px}
+</center>
+
+<br>
+
+El caracter principal para utilizar ambas librerías es ```%>%``` , _pipe_ (de tubería), atajo: `ctrl+shift+m`  
+
+Los ```%>%``` toman el set de datos a su izquierda, y los transforman mediante los comandos a su derecha, en los cuales los elementos de la izquierda están implícitos. En otros términos:  
+
+<center>
+$f(x,y)$ es equivalente a $x$ %>% $f(.,y)$ 
+</center>
+
+<br>
+
+### Ejemplo en el uso de ´%>%´:
+
+```{r}
+x <- c(1, 2, 3, 4)
+x %>% sum %>% sqrt
+```
+
+<br>
+
+Su equivalente sería:
+
+```{r}
+sqrt(sum(x))
+```
+
+<br>
+
+## Librería dplyr
+
+<br>
+
+Algunas funciones de `dplyr`:
+
+`select` `filter` `mutate` `arrange` `summarise`
+
+<br>
+
+### select
+Selecciona variables de un dataframe.
+<br>
+
+
+  ![](Figuras/dplyr_select.png){width=600px}
+
+<br>
+
+### filter
+
+se utiliza para crear un subconjunto de un marco de datos, conservando todas las filas que cumplen las condiciones establecidas. 
+<br>
+
+![](Figuras/dplyr_filter.png)
+
+<br>
+
+### mutate
+
+Permite agregar una variable a la tabla, que puede ser el resultado de operaciones sobre otras variables de la misma tabla. Se debe indicar el nombre que tomará esta variable.       
+
+En caso de especificar el nombre de una columna existente, el resultado de la operación realizada "sobre-escribirá" la información de la columna con dicho nombre.
+
+<br>
+
+![](Figuras/dplyr_mutate_new.png)
+
+<br>
+
+### arrange
+
+Ordena crecientemente de acuerdo a la columna que le indiquemos. Utilizar `desc` para orden decrescente.
+
+<br>
+
+### summarise
+
+![](Figuras/dplyr_summarise.png)
+
+Esta función es generalmente acompañada por la función `group_by`, la cual permite realizar cálculo de un grupo de observaciones del dataframe, agrupando por niveles de un determinado factor. 
+
+<br>
+
+![](Figuras/dplyr_group_by.png)
+
+<br>
+
+### Ejemplo
+
+
+Importamos la base de datos **Properati** que contiene inflormación sobre  ventas de propiedades en dólares de distintos barrios y localidades de la provincia de Buenos Aires.
+
+<br>
+
+- Importamos la base de datos **Properati**.
+
+```{r}
+properati <- read.csv2("Bases de datos/properati (USD).csv",
+                        stringsAsFactors = TRUE)
+
+```
+
+<br>
+
+- Seleccionar las variables barrios, precios en dólares y años. 
+
+```{r}
+properati1 <- properati %>% select(place_name, price, year)
+```
+
+<br>
+
+- Transformar la variable precios en dólares a pesos y agregarla a la tabla. 
+
+```{r}
+properati2 <- properati1 %>% mutate(price_pesos = price*1000)
+```
+
+<br>
+
+- Filtrar, por orden alfabético, los primeros 10 barrios y los años mayores a 2015.
+
+
+```{r}
+
+# guardo los primeros 10 barrios ordenados alfabéticamente en una variable
+
+
+niveles_barrios <- sort(unique(properati$place_name)[1:10]) # la función "sort" ordenada de menor a mayor, o viceversa, un vector o factor
+
+properati3 <- properati2 %>% filter(place_name %in% niveles_barrios & year > 2015)
+```
+
+<br>
+
+- Ordenamos de mayor a menor el dataframe a partir de la variable precios en pesos.
+
+```{r}
+properati4 <- properati3 %>% arrange(desc(price_pesos))
+```
+
+<br>
+
+- Calculamos el promedio, minimo y máximo del precio en pesos por barrios
+
+```{r}
+properati5 <- properati4 %>% 
+               group_by(place_name) %>%
+               summarise(promedio_precio_pesos = mean(price_pesos),
+                         min_precio_pesos = min(price_pesos),
+                         max_precio_pesos = max(price_pesos))
+```
+
+<br>
+
+Pero lo más importante es que se puede hacer todo esto en solo paso, para obtener la base final con las medidas descriptivas. 
+
+
+```{r}
+properati1 <- properati %>% select(place_name, price, year) %>%
+                             mutate(price_pesos = price*1000) %>% 
+                             filter(place_name %in% levels(properati$place_name)[1:10] & year > 2015) %>% 
+                             arrange(desc(price_pesos)) %>%
+                             group_by(place_name) %>%
+                             summarise(promedio_precio_pesos = mean(price_pesos),
+                             min_precio_pesos = min(price_pesos),
+                             max_precio_pesos = max(price_pesos))
+```
+
+<br>
+
+## Librería tidyr
+
+Algunas o principales funciones:
+
+`gather` `spread` `separate` `unite` `join` 
+
+<br>
+
+### gather
+
+Toma un conjunto de variables (vectores/columnas) y las colapsa en una sola columna con valores que resumen los datos de ese conjunto de variables. Hace que el data frame sea más largo.
+
+<center>
+![](Figuras/gather.png){width=400px}
+</center>
+
+
+Tidyverse contiene un nuevo método que reemplaza a esta función: **pivot_winder**
+
+<br>
+
+### spread
+
+Toma dos variables y las descompone entre múltiples variables (hace que el data frame sea más ancho)
+
+<center>
+![](Figuras/spread.png){width=400px}
+</center>
+
+<br>
+
+- Ejemplo
+
+<center>
+![](Figuras/wide_to_long(2).png){width=600px}
+</center>
+
+<br>
+
+### separatte
+
+Separa una columna en múltiples columnas
+
+
+<center>
+![](Figuras/separatte.png){width=400px}
+</center>
+
+<br>
+
+### unitte
+
+Une múltiples columnas en una sola. Es la función inversa de **separatte**
+
+<center>
+![](Figuras/unitte.png){width=400px}
+</center>
+
+<br>
+
+### join
+
+Contiene un conjunto de funciones que se utilizan para unir tablas
+
+<center>
+![fuente: http://rstudio-pubs-static.s3.amazonaws.com/227171_618ebdce0b9d44f3af65700e833593db.html](figuras/joins.png){width=400px} 
+</center>
+
+
+### Ejemplo
+
+Continuamos con la base de datos **Properati**.
+
+- Pasamos la base a formato "ancho", donde las columnas sean los años y las observaciones los precios en dólares. En la primera columna debe estar el nombre del barrio. 
+
+```{r}
+properati %>% group_by(place_name, year) %>%
+               summarise(precio_promedio = mean(price)) %>%
+               pivot_wider(names_from = year,values_from = precio_promedio)
+                   
+```
+
+- Cargamos nuevamente la base "mortalidad infantil" y la transformamos en un formato más largo. 
+
+```{r}
+library(openxlsx)
+
+mortalidad_infantil <- read.xlsx("Bases de datos/Mortalidad_infantil.xlsx")
+
+mortalidad_infantil %>% pivot_longer(cols = -country, names_to = "year", values_to = "tasa")
+
+```
+
+- Volvemos a utilizar la base "properati". 
+
+Separamos la columna "lat.lon" en dos columnas: "lat" y "lon"
+
+```{r }
+separate(properati[,c("place_name", "lat.lon")], col = "lat.lon", c("lat", "lon") , sep = ",")
+```
+
+```{r }
+unite(properati[, c("price", "currency")], col = "precio_en_USD")
+
+```
+
+<br>
+
+- Cargamos una nueva base con los códigos postales de algunos barrios de la Capital Federal, para unirla a la base "properati".
+
+```{r}
+
+codigo_postal <- read.csv2("Bases de datos/CP Capital Federal.csv", 
+                           stringsAsFactors = TRUE)
+head(codigo_postal)
+
+# Seleccionamos de la base "properati" las columnas con el nombre de la localidad, el precio en dólares y la cantidad de habitaciones. 
+
+properati1 <- properati %>% select(place_name, price, rooms)
+
+# A la base properati le agregamos una columna con los códigos postales de algunos barrios. 
+
+properati_cp <- left_join(properati1, codigo_postal, by = "place_name")
+head(properati_cp)
+
+# Podemos indicarle que nos devuelva la base pero con las filas que no tengna "NA" en CP
+properati_cp %>% filter(complete.cases(CP))
+```
+
+<br>
+
+## Ejercicios
+
+<br>
+
+Trabajar con la base de datos **gapminder** que se encuentra justamente en la librería con el mismo nombre
+
+<br>
+
+Para cargar la base se puede hacer de la siguiente manera
+
+```{r}
+gapminder <- gapminder::gapminder # de esta manera no es necesario cargar la librería, simplemente utilizamos una funció, o como este caso, una base de datos de esa librería
+
+```
+
+<br>
+
+La fundación Gapminder es una organización sin fines de lucro con sede en Suecia que promueve el desarrollo global mediante el uso de estadísticas que pueden ayudar a reducir mitos comunes e historias sensacionalistas sobre la salud y la economía mundial.
+
+En 2007 Hans Rosling (1948-2017), un médico sueco, dio una de las charlas Ted más famosas. Su presentación mostraba la evolución de tres variables en el tiempo: PIB per cápita, expectativa de vida al nacer y población
+
+<br>
+
+- Resolver
+
+1. ¿Cuál es la observación con mayor expectativa al nacer de toda la base? ¿A qué país corresponde y a qué año?
+2. ¿Cuánto aumentó la expectativa de vida al nacer por continente en en 2007? 
+3. Realizar una tabla en formato "wide" en donde las columnas contengan los años, y las observaciones sean los promedios de la población de los paises de América.
+4. ¿En qué porcentaje aumentó el PBI per cápita de Argentina en 2007 con respecto a 2002?
+5. Unir, con los diferentes métodos de **join**, el dataframe "Gapminder" con el dataframe "mortalidad infantil", pero solo el año 1952. 
+i. Utilizar todos los países de ambos dataframes. 
+i. De ambas bases utilizar solo Argentina.
+ii. De "gapminder" utilizar todos los países y de "mortalidad infantil" solo Argentina. Visualiza y extraer las dimensiones en cada caso para comparar. 

@@ -110,3 +110,18 @@ Guardar en un Excel:
 * Supertipo / Subtipo: "es un". Datos compartidos en supertipo
 * Reglas utiles: integridad de los conceptos + buen nivel de abstracción + no modelar reportes, pantallas, vistas + nombres representativos
 * Repositorio
+
+## Claves
+
+* Clave candidata (CC): identificación única de cada tupla. Una candidata debe ser elegida como clave primaria
+* Clave primaria
+* Clave foránea
+
+## Ejercicios DER
+
+* Herramienta posible: [SmartDraw](https://www.smartdraw.com/entity-relationship-diagram/er-diagram-tool.htm?srsltid=AfmBOorpf7D4ZkoKLCbTdiP3zd_M7Xv_llq9ToBNyYwY9KePWK58HDMJ)
+
+* ejercicio libros-autores
+* ejercicio buques
+* tarea: alumnos
+* clase que viene normalización
