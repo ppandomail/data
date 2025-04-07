@@ -125,3 +125,90 @@ Guardar en un Excel:
 * ejercicio buques
 * tarea: alumnos
 * clase que viene normalización
+
+## Normalización
+
+* Es un proceso para optimizar BD Relacionales
+* Organizar la información en tablas separadas, mejorando la integridad yreduciendo la redundancia de datos  
+
+* **Reducción de redundancia**: evita repetición de información en diferentes tablas, mejorando la eficiencia de almacenamiento y actualización
+* **Integridad de datos**: asegura la consistencia y precisón de la información, minimizando la posibilida de error y contradicciones
+* **Mantenimiento simplificado**
+* **Flexibilidad y Escalabilidad (crecer)**: permite la expansión de la BD sin afectar la estructura o la integridad de los datos existentes
+
+### Formas Normales
+
+| Formas Normales ||
+| -- | -- |
+| **FN 1** | Elimina grupos repetidos de datos, creando una tabla donde cada columna representa un atributo único |
+| **FN 2** | FN 1 + Atributos no clave dependan completamente de la PK (me fijo en claves compuestas)             |
+| **FN 3** | FN 2 + Atributos no clave no dependan de otros atributos no clave                                    |
+
+* **Ventas**
+
+  | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado | prod: {num_art, nom_art, cant, precio}+ | total_venta |
+  | --            | --    | --     | --      | --         | --         | --                                      | --          |   
+
+#### FN1
+
+* Elimino total_venta por ser calculable y extraer grupos repetidos
+  
+* **Ventas**
+  
+  | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado | 
+  | --            | --    | --     | --      | --         | --         |
+
+* **Items**
+  
+  | id_orden (PK) | num_art (PK) | nom_art | cant | precio |
+  | --            | --           | --      | --   | --     |
+
+#### FN2
+
+* **Ventas**
+  
+  | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado | 
+  | --            | --    | --     | --      | --         | --         |
+
+* **Articulos**
+
+  | num_art (PK) | nom_art | precio |
+  | --           | --      | --     |
+
+* **Items**
+
+  | id_orden (PK) | num_art (PK) | cant |
+  | --            | --           | --   |
+
+#### FN3
+
+* **Ventas**
+
+  | id_orden (PK) | fecha | id_cli | cod_estado | 
+  | --            | --    | --     | --         |
+
+* **Clientes**
+
+  | id_cli (PK) | nom_cli |
+  | --          | --      |
+
+* **Estados**
+
+  | cod_estado (PK) | nom_estado |
+  | --              | --         |
+
+* **Articulos**
+
+  | num_art (PK) | nom_art | precio |
+  | --           | --      | --     |
+
+* **Items**
+
+  | id_orden (PK) | num_art (PK) | cant |
+  | --            | --           | --   |
+
+
+
+## Tarea
+
+* Normalizar: Envio de Mercancia
