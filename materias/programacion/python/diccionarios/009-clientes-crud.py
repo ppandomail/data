@@ -17,4 +17,70 @@ nombre.
 6. Terminar el programa.
 '''
 
-clientes = {'123': {'nombre': 'Pablo', 'preferente': True}, '456': {'nombre': 'Ana', 'preferente': False}, '789': {'nombre': 'Maria', 'preferente': True}}
+clientes = {'123': {'nom': 'Pablo', 'dir': 'abc', 'tel': '123', 'mail': '', 'pref': True}, 
+            '456': {'nom': 'Ana', 'dir': 'abc', 'tel': '123', 'mail': '', 'pref': False}, 
+            '789': {'nom': 'Maria', 'dir': 'abc', 'tel': '123', 'mail': '', 'pref': True}}
+
+def menu():
+    opc = 0
+    while (opc != 6):
+        if opc == 1:
+            agregar()
+        if opc == 2:
+            eliminar()
+        if opc == 3:
+            consultar()
+        if opc == 4:
+            listar()
+        if opc == 5:
+            listar_pref()
+        if opc != 0:
+            input()
+        print()
+        print('--------MENU---------')
+        print('1. Agregar cliente')
+        print('2. Eliminar cliente')
+        print('3. Consultar cliente')
+        print('4. Listado clientes')
+        print('5. Clientes preferentes')
+        print('6. Salir')
+        print()
+        opc = int(input('?- '))
+
+def agregar():
+    dni = input('DNI: ')
+    datos = {}
+    datos['nom'] = input('Nombre: ')
+    datos['dir'] = input('Dirección: ')
+    datos['tel'] = input('Tel. :')
+    datos['mail'] = input('Email: ')
+    datos['pref'] = True if input('Preferente (S/N): ') == 'S' else False
+    clientes[dni] = datos
+
+def eliminar():
+    dni = input('DNI: ')
+    if dni in clientes.keys():
+        clientes.pop(dni)
+    else:
+        print('Cliente no encontrado...')
+
+def consultar():
+    dni = input('DNI: ')
+    if dni in clientes.keys():
+        print(datos(dni, clientes[dni]))
+    else:
+        print('Cliente no encontrado...')
+
+def datos(dni, cliente):
+    return f"{dni}, {cliente['nom']}, {cliente['dir']}, {cliente['tel']}, {cliente['mail']}, {cliente['pref']}"
+
+def listar_pref():
+    for elem in clientes.items():
+        if elem[1]['pref']:
+            print(datos(elem[0], elem[1]))
+
+def listar():
+    for elem in clientes.items():
+        print(datos(elem[0], elem[1]))
+                
+menu()
