@@ -20,7 +20,8 @@ erDiagram
         * DEST_DIR "Direccion del destinatario"
         * DEST_TEL "Telefono del destinatario"
         * DEST_KM "Distancia kilometraje de Ciudad origen a ciudad del destinatario"
-        * CARGA(1-5) "{CODIGO = Codigo del paquete, TIPO = Tipo de paquete, NOMBRE = Nombre del paquete, DESCRIPCION = Descripción del paquete, VALR_FLETE = Valor del flete}"
+        * CARGA(1-5) "{CODIGO = Codigo del paquete, TIPO = Tipo de paquete, NOMBRE = Nombre del paquete, DESCRIPCION = Descripción del paquete}"
+        * VALR_FLETE "Valor del flete"
     }
 ```
 
@@ -45,7 +46,8 @@ erDiagram
         * DEST_CIUDAD
         * DEST_DIR
         * DEST_TEL
-        * DEST_KM  
+        * DEST_KM 
+        * VALR_FLETE 
     }
 
     CARGA {
@@ -54,11 +56,10 @@ erDiagram
         * TIPO
         * NOMBRE
         * DESCRIPCION
-        * VALR_FLETE
     }
 ```
 
-## FN2
+## FN2: mirar claves compuestas para desdoblar
 
 ```mermaid
 erDiagram
@@ -80,12 +81,12 @@ erDiagram
         * DEST_DIR
         * DEST_TEL
         * DEST_KM 
+        * VALR_FLETE 
     }
 
     CARGA {
         * ENVIO_NO PK
         * CODIGO PK
-        * VALR_FLETE 
     }
 
     PAQUETE {
@@ -96,7 +97,7 @@ erDiagram
     }
 ```
 
-## FN3
+## FN3: mirar dependencias entre no claves
 
 ```mermaid
 erDiagram
@@ -105,7 +106,8 @@ erDiagram
         * ENVIO_FECHA
         * ENVIO_HORA
         * ORGN_RIF FK
-        * DEST_ID FK  
+        * DEST_ID FK 
+        * VALR_FLETE  
     }
 
     EMPRESA_ORIGEN {
@@ -140,7 +142,6 @@ erDiagram
     CARGA {
         * ENVIO_NO PK
         * PAQ_CODIGO PK
-        * VALR_FLETE 
     }
 
     PAQUETE {
@@ -151,7 +152,7 @@ erDiagram
     }
 
     TIPO_PAQ {
-        * TIPO_PAQ_COD
+        * TIPO_PAQ_COD PK
         * TIPO_PAQ_NOM
     }
 ```

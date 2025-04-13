@@ -1,6 +1,7 @@
 # Fundamentos de Base de Datos
 
 * Prof: Dr. Enrique Fernandez
+* [Email](enfernandez@uno.edu.ar)
 * Sábados de 9 a 12
 * Enfoque práctico
 * Hacer TP final, se puede hacer con SQLite
@@ -147,7 +148,7 @@ Guardar en un Excel:
 * **Ventas**
 
   | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado | prod: {num_art, nom_art, cant, precio}+ | total_venta |
-  | --            | --    | --     | --      | --         | --         | --                                      | --          |   
+  | --            | --    | --     | --      | --         | --         | --                                      | --          |
 
 #### FN1
 
@@ -155,7 +156,7 @@ Guardar en un Excel:
   
 * **Ventas**
   
-  | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado | 
+  | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado |
   | --            | --    | --     | --      | --         | --         |
 
 * **Items**
@@ -167,7 +168,7 @@ Guardar en un Excel:
 
 * **Ventas**
   
-  | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado | 
+  | id_orden (PK) | fecha | id_cli | nom_cli | cod_estado | nom_estado |
   | --            | --    | --     | --      | --         | --         |
 
 * **Articulos**
@@ -184,7 +185,7 @@ Guardar en un Excel:
 
 * **Ventas**
 
-  | id_orden (PK) | fecha | id_cli | cod_estado | 
+  | id_orden (PK) | fecha | id_cli | cod_estado |
   | --            | --    | --     | --         |
 
 * **Clientes**
@@ -207,8 +208,52 @@ Guardar en un Excel:
   | id_orden (PK) | num_art (PK) | cant |
   | --            | --           | --   |
 
+## Algebra Relacional
 
+* Lenguaje formal para describir y manipular datos
+* Operaciones básicas:
+  * Selección: filtras filas basada en una condición
+  * Proyección: selecciona columnas
+  * Unión: combina filas
+  * Intersección: filas comunes
+  * Diferencia: filas de una tabla pero no en la otra
+  * Producto cartesiano
+  * División
+  * Renombrado
 
-## Tarea
+## Índice
 
-* Normalizar: Envio de Mercancia
+* Tiene un determinado orden
+* Permite referenciar y encontrar cosas más rápida
+* Algoritmos de indexación -> reduce tiempos de búsqueda
+
+## Tipos de Datos
+
+* Definen el formato de los valores que se almacenan en las columnas de una tabla
+* Cada columna debe tener un tipo de datos
+* Tipos:
+  * Entero (INT)
+  * Decimal (DECIMAL)
+  * Punto Flotante Simple (FLOAT)
+  * Punto Flotante Doble (DOUBLE)
+  * Caracter (CHAR)
+  * Texto (VARCHAR)
+  * Texto Largo (TEXT)
+  * Fecha (DATE)
+  * Hora (TIME)
+  * Fecha y Hora (DATETIME)
+  * Intervalo de tiempo (INTERVAL)
+  * Booleano (BOOLEAN)
+  * BLOB (imagenes, archivos)
+  * VARBINARY: similar a BLOB pero con longitud variable
+* Tipos de datos especiales:
+  * PRIMARY KEY
+  * FOREIGN KEY
+  * UNIQUE: garantiza que todos los valores en una columna sean únicos, evitando duplicados
+  * INDEX: crea acceso rápido a los datos, mejorando la velocidad de las consultas. PK por default es un INDEX
+
+## SQL
+
+* [Herramienta de trabajo](https://sqlitecloud.io/)
+* Botón Studio: ya hay tablas de ejemplo
+* Tarea: acceder al esquema de la BD (Studio/SQL Console/Database Schema) de albunes y artistas y armar el DER
