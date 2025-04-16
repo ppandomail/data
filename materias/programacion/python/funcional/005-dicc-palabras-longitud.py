@@ -10,4 +10,8 @@ def generar_dicc_palabras_longitud(frase):
         dicc[palabra] = len(palabra)
     return dicc
 
+def generar_dicc_palabras_longitud2(frase):
+    return {value: len(value) for value in frase.split()} 
+
 print(generar_dicc_palabras_longitud('oid mortales el grito sagrado'))
+print(generar_dicc_palabras_longitud2('oid mortales el grito sagrado'))

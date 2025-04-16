@@ -4,5 +4,4 @@ muestre por pantalla otro correo electrónico con el mismo nombre (la parte dela
 de la arroba @) pero con dominio argentina.ar.
 '''
 
-email = input('Email: ')
-print(email.split('@')[0] + '@argentina.ar')
+print(input('Email: ').split('@')[0] + '@argentina.ar')

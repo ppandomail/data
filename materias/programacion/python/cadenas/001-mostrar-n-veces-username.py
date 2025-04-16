@@ -7,4 +7,4 @@ como el número introducido.
 nom_usuario = input('Nombre de usuario: ')
 n = int(input('Número: '))
 for i in range(0, n):
-    print(nom_usuario)    
+    print(nom_usuario)

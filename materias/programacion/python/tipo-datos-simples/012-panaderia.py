@@ -8,6 +8,6 @@ coste final total.
 
 bolsas_vendidad_no_dia = int(input('Cant de bolsas vendidas que no son del día: '))
 precio_bolsa_pan = 2000
-print('Precio bolsa de pan: $ ' + str(precio_bolsa_pan))
+print(f'Precio bolsa de pan: $ {str(precio_bolsa_pan)}')
 print('Descuento por no ser fresca: 60%')
-print('Costo total: $ ' + str(bolsas_vendidad_no_dia * precio_bolsa_pan * 60 / 100))
+print(f'Costo total: $ {str(bolsas_vendidad_no_dia * precio_bolsa_pan * 60 / 100)}')

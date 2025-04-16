@@ -6,6 +6,9 @@ forma.
 suma = n(n+1)/2
 '''
 
+#n = int(input('n: '))
+#suma = n * (n+1) / 2
+#print(suma)
+
 n = int(input('n: '))
-suma = n * (n+1) / 2
-print(suma)
+print(n * (n+1) / 2)

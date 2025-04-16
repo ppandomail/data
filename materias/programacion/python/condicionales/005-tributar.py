@@ -5,9 +5,11 @@ pregunte al usuario su edad y sus ingresos mensuales y muestre por pantalla si e
 usuario tiene que tributar o no.
 '''
 
-edad = int(input('Edad: '))
-ingresos = float(input('Ingresos: '))
-if edad >= 18 and ingresos >= 500000:
-    print('Tributa')
-else:
-    print('No tributa')
+#edad = int(input('Edad: '))
+#ingresos = float(input('Ingresos: '))
+#if edad >= 18 and ingresos >= 500000:
+#    print('Tributa')
+#else:
+#    print('No tributa')
+
+print('Tributa' if int(input('Edad: ')) >= 18 and float(input('Ingresos: ')) >= 500000 else 'No tributa')

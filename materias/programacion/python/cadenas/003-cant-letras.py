@@ -6,4 +6,4 @@ letras que tienen el nombre.
 '''
 
 nom_usuario = input('Nombre de usuario: ')
-print(nom_usuario.upper() + ' tiene ' + str(len(nom_usuario)) + ' letras')
+print(f'{nom_usuario.upper()} tiene {str(len(nom_usuario))} letras')

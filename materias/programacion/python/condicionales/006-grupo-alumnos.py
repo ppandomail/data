@@ -6,9 +6,13 @@ programa que pregunte al usuario su nombre y sexo, y muestre por pantalla el gru
 que le corresponde.
 '''
 
-nombre = input('Nombre: ')
+#nombre = input('Nombre: ')
+#sexo = input('Sexo (M/V): ')
+#if (sexo == 'M' and nombre[0] < 'M') or (sexo == 'V' and nombre[0] > 'N'):
+#    print('Grupo A')
+#else:
+#    print('Grupo B')
+
+letra = input('Nombre: ')[0]
 sexo = input('Sexo (M/V): ')
-if (sexo == 'M' and nombre[0] < 'M') or (sexo == 'V' and nombre[0] > 'N'):
-    print('Grupo A')
-else:
-    print('Grupo B')
+print('Grupo A' if (sexo == 'M' and letra < 'M') or (sexo == 'V' and letra > 'N') else 'Grupo B')

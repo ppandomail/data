@@ -4,5 +4,7 @@ de que el usuario lo introduzca muestre por pantalla la cadena ¡Hola <nombre>!,
 donde <nombre> es el nombre que el usuario haya introducido.
 '''
 
-username = input('Username: ')
-print('¡Hola ' + username + '!')
+# username = input('Username: ')
+# print('¡Hola ' + username + '!')
+
+print(f'¡Hola {input('Username: ')}!')

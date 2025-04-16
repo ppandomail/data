@@ -5,9 +5,12 @@ contraseña introducida por el usuario coincide con la guardada en la variable s
 tener en cuenta mayúsculas y minúsculas.
 '''
 
+#contraseña_actual = 'pepe123'
+#contraseña_usuario = input('Contraseña: ')
+#if contraseña_usuario.upper() == contraseña_actual.upper():
+#    print('Coincide')
+#else:
+#    print('No coincide')
+
 contraseña_actual = 'pepe123'
-contraseña_usuario = input('Contraseña: ')
-if contraseña_usuario.upper() == contraseña_actual.upper():
-    print('Coincide')
-else:
-    print('No coincide')
+print('Coincide' if input('Contraseña: ').upper() == contraseña_actual.upper() else 'No coincide')

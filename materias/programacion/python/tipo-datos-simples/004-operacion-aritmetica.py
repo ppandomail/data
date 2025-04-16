@@ -4,5 +4,7 @@ operación aritmética:
 (3+2/2*5)^2
 '''
 
-operacion = pow((3+2)/(2*5), 2)
-print(operacion)
+#operacion = pow((3+2)/(2*5), 2)
+#print(operacion)
+
+print(pow((3+2)/(2*5), 2))

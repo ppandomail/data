@@ -6,5 +6,4 @@ número de teléfono con este formato y muestre por pantalla el número de telé
 sin el prefijo y la extensión.
 '''
 
-numero_telefono = input('Número de teléfono (prefijo-número-extensión): ')
-print(numero_telefono.split('-')[1])
+print(input('Número de teléfono (prefijo-número-extensión): ').split('-')[1])

@@ -6,5 +6,5 @@ centavos del precio introducido.
 
 precio_producto = round(float(input('Precio producto: $ ')), 2)
 pesos_centavos = str(precio_producto).split('.')
-print('Pesos: ' + pesos_centavos[0])
-print('Centavos: ' + pesos_centavos[1])
+print(f'Pesos: {pesos_centavos[0]}')
+print(f'Centavos: {pesos_centavos[1]}')

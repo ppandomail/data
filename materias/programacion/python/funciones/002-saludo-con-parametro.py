@@ -4,7 +4,7 @@ pantalla el saludo ¡hola <nombre>!
 '''
 
 def saludo(nombre):
-    print('¡hola ' + nombre + '!')
+    print(f'¡hola {nombre}!')
 
 saludo('Pablo')
 saludo('Ana')
