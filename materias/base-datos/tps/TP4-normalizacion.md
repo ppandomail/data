@@ -3,25 +3,25 @@
 ```mermaid
 erDiagram
     ENVIO {
-        * ENVIO_NO "Numero de ENVIO (CP)"
-        * ENVIO_FECHA "Fecha de la ENVIO"
-        * ENVIO_HORA "Hora de la ENVIO"
-        * ORGN_RIF  "Identificacion de Empresa Origen"
-        * ORGN_NOM "Nombre de Empresa Origen"
-        * ORGN_ACT "Actividad Comercial de Empresa Origen"
-        * ORGN_CIUDAD "Ciudad de Empresa Origen"
-        * ORGN_DIR "Direccion de Empresa Origen"
-        * ORGN_TEL "Telefono de Empresa Origen"
-        * ORGN_CEL "Celular de Empresa Origen"
-        * DEST_ID "Identificacion del destinatario"
-        * DEST_NOM "Nombre del destinatario"
-        * DEST_COD_CIUDAD "Codigo de la ciudad del destinatario"
-        * DEST_CIUDAD "Ciudad del destinatario"
-        * DEST_DIR "Direccion del destinatario"
-        * DEST_TEL "Telefono del destinatario"
-        * DEST_KM "Distancia kilometraje de Ciudad origen a ciudad del destinatario"
-        * CARGA(1-5) "{CODIGO = Codigo del paquete, TIPO = Tipo de paquete, NOMBRE = Nombre del paquete, DESCRIPCION = Descripción del paquete}"
-        * VALR_FLETE "Valor del flete"
+        INTEGER  ENVIO_NO "Numero de ENVIO (CP)"
+        DATE     ENVIO_FECHA "Fecha de la ENVIO"
+        TIME     ENVIO_HORA "Hora de la ENVIO"
+        INTEGER  ORGN_RIF  "Identificacion de Empresa Origen"
+        NVARCHAR ORGN_NOM "Nombre de Empresa Origen"
+        NVARCHAR ORGN_ACT "Actividad Comercial de Empresa Origen"
+        NVARCHAR ORGN_CIUDAD "Ciudad de Empresa Origen"
+        NVARCHAR ORGN_DIR "Direccion de Empresa Origen"
+        NVARCHAR ORGN_TEL "Telefono de Empresa Origen"
+        NVARCHAR ORGN_CEL "Celular de Empresa Origen"
+        INTEGER  DEST_ID "Identificacion del destinatario"
+        NVARCHAR DEST_NOM "Nombre del destinatario"
+        INTEGER  DEST_COD_CIUDAD "Codigo de la ciudad del destinatario"
+        NVARCHAR DEST_CIUDAD "Ciudad del destinatario"
+        NVARCHAR DEST_DIR "Direccion del destinatario"
+        NVARCHAR DEST_TEL "Telefono del destinatario"
+        NUMBER   DEST_KM "Distancia kilometraje de Ciudad origen a ciudad del destinatario"
+        NVARCHAR CARGA(1-5) "{CODIGO = Codigo del paquete, TIPO = Tipo de paquete, NOMBRE = Nombre del paquete, DESCRIPCION = Descripción del paquete}"
+        NUMBER   VALR_FLETE "Valor del flete"
     }
 ```
 
@@ -30,32 +30,32 @@ erDiagram
 ```mermaid
 erDiagram
     ENVIO {
-        * ENVIO_NO PK
-        * ENVIO_FECHA
-        * ENVIO_HORA
-        * ORGN_RIF
-        * ORGN_NOM
-        * ORGN_ACT
-        * ORGN_CIUDAD
-        * ORGN_DIR
-        * ORGN_TEL
-        * ORGN_CEL
-        * DEST_ID
-        * DEST_NOM
-        * DEST_COD_CIUDAD
-        * DEST_CIUDAD
-        * DEST_DIR
-        * DEST_TEL
-        * DEST_KM 
-        * VALR_FLETE 
+        INTEGER  ENVIO_NO PK
+        DATE     ENVIO_FECHA
+        TIME     ENVIO_HORA
+        INTEGER  ORGN_RIF
+        NVARCHAR ORGN_NOM
+        NVARCHAR ORGN_ACT
+        NVARCHAR ORGN_CIUDAD
+        NVARCHAR ORGN_DIR
+        NVARCHAR ORGN_TEL
+        NVARCHAR ORGN_CEL
+        INTEGER  DEST_ID
+        NVARCHAR DEST_NOM
+        INTEGER  DEST_COD_CIUDAD
+        NVARCHAR DEST_CIUDAD
+        NVARCHAR DEST_DIR
+        NVARCHAR DEST_TEL
+        NUMBER   DEST_KM 
+        NUMBER   VALR_FLETE 
     }
 
     CARGA {
-        * ENVIO_NO PK
-        * CODIGO PK
-        * TIPO
-        * NOMBRE
-        * DESCRIPCION
+        INTEGER  ENVIO_NO PK
+        INTEGER  CODIGO PK
+        NVARCHAR TIPO
+        NVARCHAR NOMBRE
+        NVARCHAR DESCRIPCION
     }
 ```
 
@@ -64,36 +64,36 @@ erDiagram
 ```mermaid
 erDiagram
     ENVIO {
-        * ENVIO_NO PK
-        * ENVIO_FECHA
-        * ENVIO_HORA
-        * ORGN_RIF
-        * ORGN_NOM
-        * ORGN_ACT
-        * ORGN_CIUDAD
-        * ORGN_DIR
-        * ORGN_TEL
-        * ORGN_CEL
-        * DEST_ID
-        * DEST_NOM
-        * DEST_COD_CIUDAD
-        * DEST_CIUDAD
-        * DEST_DIR
-        * DEST_TEL
-        * DEST_KM 
-        * VALR_FLETE 
+        INTEGER  ENVIO_NO PK
+        DATE     ENVIO_FECHA
+        TIME     ENVIO_HORA
+        INTEGER  ORGN_RIF
+        NVARCHAR ORGN_NOM
+        NVARCHAR ORGN_ACT
+        NVARCHAR ORGN_CIUDAD
+        NVARCHAR ORGN_DIR
+        NVARCHAR ORGN_TEL
+        NVARCHAR ORGN_CEL
+        INTEGER  DEST_ID
+        NVARCHAR DEST_NOM
+        INTEGER  DEST_COD_CIUDAD
+        NVARCHAR DEST_CIUDAD
+        NVARCHAR DEST_DIR
+        NVARCHAR DEST_TEL
+        NUMBER   DEST_KM 
+        NUMBER   VALR_FLETE 
     }
 
     CARGA {
-        * ENVIO_NO PK
-        * CODIGO PK
+        INTEGER ENVIO_NO PK
+        INTEGER CODIGO PK
     }
 
     PAQUETE {
-        * CODIGO PK
-        * TIPO
-        * NOMBRE
-        * DESCRIPCION
+        INTEGER  CODIGO PK
+        NVARCHAR TIPO
+        NVARCHAR NOMBRE
+        NVARCHAR DESCRIPCION
     }
 ```
 
@@ -102,57 +102,57 @@ erDiagram
 ```mermaid
 erDiagram
     ENVIO {
-        * ENVIO_NO PK
-        * ENVIO_FECHA
-        * ENVIO_HORA
-        * ORGN_RIF FK
-        * DEST_ID FK 
-        * VALR_FLETE  
+        INTEGER ENVIO_NO PK
+        DATE    ENVIO_FECHA
+        TIME    ENVIO_HORA
+        INTEGER ORGN_RIF FK
+        INTEGER DEST_ID FK 
+        NUMBER  VALR_FLETE  
     }
 
     EMPRESA_ORIGEN {
-        * ORGN_RIF PK
-        * ORGN_NOM
-        * ACT_COD FK
-        * CIUDAD_COD FK
-        * ORGN_DIR
-        * ORGN_TEL
-        * ORGN_CEL
+        INTEGER  ORGN_RIF PK
+        NVARCHAR ORGN_NOM
+        INTEGER  ACT_COD FK
+        INTEGER  CIUDAD_COD FK
+        NVARCHAR ORGN_DIR
+        NVARCHAR ORGN_TEL
+        NVARCHAR ORGN_CEL
     }
 
     ACTIVIDAD {
-        * ACT_COD PK
-        * ACT_NOM
+        INTEGER  ACT_COD PK
+        NVARCHAR ACT_NOM
     }
 
     DESTINATARIO {
-        * DEST_ID PK
-        * DEST_NOM
-        * CIUDAD_COD FK
-        * DEST_DIR
-        * DEST_TEL
-        * DEST_KM 
+        INTEGER  DEST_ID PK
+        NVARCHAR DEST_NOM
+        INTEGER  CIUDAD_COD FK
+        NVARCHAR DEST_DIR
+        NVARCHAR DEST_TEL
+        NUMBER   DEST_KM 
     }
 
     CIUDAD {
-        * CIUDAD_COD PK
-        * CIUDAD_NOM
+        INTEGER  CIUDAD_COD PK
+        NVARCHAR CIUDAD_NOM
     }
 
     CARGA {
-        * ENVIO_NO PK
-        * PAQ_CODIGO PK
+        INTEGER ENVIO_NO PK
+        INTEGER PAQ_CODIGO PK
     }
 
     PAQUETE {
-        * PAQ_CODIGO PK
-        * TIPO_PAQ_COD FK
-        * NOMBRE
-        * DESCRIPCION
+        INTEGER  PAQ_CODIGO PK
+        INTEGER  TIPO_PAQ_COD FK
+        NVARCHAR NOMBRE
+        NVARCHAR DESCRIPCION
     }
 
     TIPO_PAQ {
-        * TIPO_PAQ_COD PK
-        * TIPO_PAQ_NOM
+        INTEGER  TIPO_PAQ_COD PK
+        NVARCHAR TIPO_PAQ_NOM
     }
 ```
