@@ -50,6 +50,9 @@
 
 ## Parcial
 
-* Multiple choice
-* 
-
+* Multiple choice, corregir fragmentos de código.
+* Con nota ? SI, se aprueba con 7
+* Tiempo ? se puede extender
+* Como se entrega ? CAMPUS
+* Recuperatorio ? SI
+* Materia se aprueba con examen o con recuperatorio
