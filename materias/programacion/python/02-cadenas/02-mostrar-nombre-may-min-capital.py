@@ -16,4 +16,4 @@ introducir su nombre combinando mayúsculas y minúsculas como quiera
 #print(nombres_capitalize)
 
 nombre = input('Ingrese nombre completo: ')
-print(nombre.lower(), nombre.upper(), ' '.join([value.capitalize() for value in nombre.split()]), sep='\n')
+print(nombre.lower(), nombre.upper(), nombre.title(), sep='\n')

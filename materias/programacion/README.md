@@ -47,3 +47,9 @@
 * Listas
 * Tuplas
 * Diccionarios
+
+## Parcial
+
+* Multiple choice
+* 
+
