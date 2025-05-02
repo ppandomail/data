@@ -1,6 +1,8 @@
 # Fundamentos de Programación
 
-* HORARIO 18:30 a 21:30
+* Prof. Jonatan Uran
+* [Email](jonuran@gmail.com)
+* HORARIO: Martes de 18:30 a 21:30
 * Lenguaje Python: estructura de datos + POO + complejidad
 * Libro de referencia que va a subir al campus
 * Guía de ejercicios para ir resolviendo clase a clase (tiene que subir)
@@ -50,7 +52,7 @@
 
 ## Parcial
 
-* Multiple choice, corregir fragmentos de código.
+* Multiple choice, corregir fragmentos de código
 * Con nota ? SI, se aprueba con 7
 * Tiempo ? se puede extender
 * Como se entrega ? CAMPUS

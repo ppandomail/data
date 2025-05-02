@@ -2,9 +2,8 @@
 
 * Clases de jueves de 18:30 – 21:00pm
 * [Enlace de la videollamada](https://meet.google.com/cyd-efsh-cmy)
-* Profesor: Diego Molina
+* Profesor: Diego Edwards Molina
 * Campus
-* A principios de Abril: Matricula + 1ra cuota
 * Parcial al final del cuatri
 * TP grupal
 

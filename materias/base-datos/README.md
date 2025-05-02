@@ -257,3 +257,73 @@ Guardar en un Excel:
 * [Herramienta de trabajo](https://sqlitecloud.io/)
 * Botón Studio: ya hay tablas de ejemplo
 * Tarea: acceder al esquema de la BD (Studio/SQL Console/Database Schema) de albunes y artistas y armar el DER
+* que quiero:            SELECT columnas
+* de donde:              FROM tablas
+* bajo que condiciones:  WHERE condiciones
+
+* Lenguaje de consulta estructurado para interactuar con la BD
+* Tipos de datos en SQL: numéricos, texto, fecha-hora, booleanos. Compatibilidades
+* Sentencias: SELECT FROM WHERE
+* Operadores: =, !=, >, <, >=, <=, AND, OR, NOT, LIKE
+* Avanzadas: ORDER BY, GROUP BY, HAVING (filtra grupos agregados)
+* Uniones y subconsultas (anidamiento de consultas)
+* DDL: CREATE, ALTER, DROP
+* DML: INSERT, UPDATE, DELETE
+* Seguridad, Optimización, Rendimiento
+
+  ```sql
+  SELECT
+    *
+  FROM
+    artists
+  WHERE
+    name = 'Accept';
+
+  -- Clientes argentinos
+  SELECT
+    firstname,
+    lastname,
+    country
+  FROM
+    customers
+  WHERE
+    country = 'Argentina';
+
+  SELECT
+    firstname,
+    lastname,
+    country
+  FROM
+    customers
+  ORDER BY
+    1 DESC;
+
+  SELECT
+    firstname,
+    count(*)
+  FROM
+    customers
+  GROUP BY
+    firstname
+  HAVING
+    count(*) >= 2
+  ORDER BY
+    1;
+
+  SELECT
+    country AS pais,
+    firstname,
+    count(*) AS cant
+  FROM
+    customers
+  GROUP BY
+    pais,
+    firstname
+  ORDER BY
+    cant
+  ```
+
+## TP
+
+* Punto 6, todos los datos en una misma estructura, inner join con ids iguales (filtrando ids, manteniendo la integridad referencial)
+* Exportación manual mediante botón "Exportar" desde el SQLite
