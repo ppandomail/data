@@ -22,9 +22,9 @@
 
 ## Materias
 
-| DIA | FH INI | FH FIN | CODIGO | NOMBRE |
-| --  | --     | --     | --     | --     |
+| DIA | FH INI | FH FIN | CODIGO | NOMBRE                                                                               |
+| --  | --     | --     | --     | --                                                                                   |
 | JUE | 20-03  | 05-06  | 7101   | [Exploración y Visualización de Datos](materias/exploracion-visualizacion/README.md) |
-| SAB | 22-03  | 26-04  | 7100   | [Fundamentos de Base de Datos](materias/base-datos/README.md)  |
-| MAR | 18-03  | 22-04  | 7099   | [Fundamentos de Programación](materias/programacion/README.md) |
-| MAR | 29-04  | 03-06  | 1050   | [Fundamentos de Estadísticas](materias)                        |
+| SAB | 22-03  | 26-04  | 7100   | [Fundamentos de Base de Datos](materias/base-datos/README.md)                        |
+| MAR | 18-03  | 22-04  | 7099   | [Fundamentos de Programación](materias/programacion/README.md)                       |
+| MAR | 06-05  | 03-06  | 1050   | [Fundamentos de Estadísticas](materias/estadistica/README.md)                        |
