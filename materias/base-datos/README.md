@@ -323,11 +323,6 @@ Guardar en un Excel:
     cant
   ```
 
-## TP
-
-* Punto 6, todos los datos en una misma estructura, inner join con ids iguales (filtrando ids, manteniendo la integridad referencial)
-* Exportación manual mediante botón "Exportar" desde el SQLite
-
 ## SQL Avanzado
 
 ### JOIN
@@ -363,4 +358,3 @@ DELETE FROM tabla [WHERE condicion];
 ### INDICE
 
 * Crea un acceso rápido a los datos en la tabla, mejorando el rendimiento de las consultas
-
