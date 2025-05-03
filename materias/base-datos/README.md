@@ -327,3 +327,40 @@ Guardar en un Excel:
 
 * Punto 6, todos los datos en una misma estructura, inner join con ids iguales (filtrando ids, manteniendo la integridad referencial)
 * Exportación manual mediante botón "Exportar" desde el SQLite
+
+## SQL Avanzado
+
+### JOIN
+
+* JOIN: juntar tablas (producto cartesiano de filas)
+* Tipos de JOIN:
+  * INNER JOIN: filas que coincidan en ambas tablas
+  * LEFT JOIN: filas de la tabla izq y filas coincidentes de la tabla der
+  * RIGHT JOIN: filas de la tabla der y filas coincidentes de la tabla izq
+  * FULL JOIN
+* Sintaxis:
+
+    ```sql
+    SELECT *
+    FROM t1 {INNER JOIN, LEFT JOIN, RIGHT JOIN} t2 ON t1.id = t2.id
+    ```
+
+### INSERT
+
+```sql
+INSERT INTO tabla (col1, col2, ...) VALUES (v1, v2, ...);
+```
+
+* Columnas que no se especifican tomarán el valor por defecto si está definido
+* PK deben ser únicas y no se pueden duplicar
+
+### DELETE
+
+```sql
+DELETE FROM tabla [WHERE condicion];
+```
+
+### INDICE
+
+* Crea un acceso rápido a los datos en la tabla, mejorando el rendimiento de las consultas
+
