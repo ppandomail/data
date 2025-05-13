@@ -1,0 +1,16 @@
+library(ggplot2)
+setwd("/Users/ppando/Materias/data/materias/exploracion-visualizacion/R/09-visualizacion")
+paises <- read.table("autos", sep = ";", header = TRUE)
+head(paises)
+ggplot(paises, aes(x=Tasa_de_crecimiento, y=Poblacion_urbana, color = Continente)) + geom_point(shape = 17) + geom_smooth()
+
+library(openxlsx)
+library(ggcorrplot)
+library(dplyr)
+autos <- read.xlsx("autos.xlsx")
+ggplot(data = autos, aes(x = Marca)) + geom_bar(color="purple", fill="#69b3a2")
+var_corr_autos <- autos %>% select("Rendimiento.(millas.por.galon)",
+                                   "HP", "Peso", "Aceleracion")
+head(var_corr_autos)
+corr_autos <- corr <- round(cor(var_corr_autos), 2)
+ggcorrplot(corr_autos)
