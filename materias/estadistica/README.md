@@ -6,7 +6,7 @@
 
 ## Evaluación
 
-* TP individual: AED + simulación
+* TP individual: conjunto de datos + preguntas sobre esos datos. Entrega: sab 24/5
 * TP grupal: integrador utilizando un conjunto de datos a elección (análisis exploratorio + informe)
 
 ## ¿Por qué necesitamos entender Estadística?
@@ -41,6 +41,12 @@
   * característica o propiedades del objeto de estudio
 * **Casos** en filas: {45, médico, CABA}, {53, contador, CABA}, ...
 
+  ```R
+  datos <- read.table("BD.txt", header =  F, sep = ",")
+  colnames(datos) <- c("Col1", "Col2", "Col3")
+  head(datos)
+  ```
+
 ## Tipos de variables
 
 * **Cualitativas o Categóricas**
@@ -49,6 +55,13 @@
 * **Cuantitativas o Numéricas**
   * Discretas (entero): cant de materias aprobadas
   * Continuas (real): edad, tiempo de obtención de título
+
+  ```R
+  str(datos)
+  Col1: chr "M" "M" "F" ...
+  Col2: num 0.45 0.35 0.67 ...
+  Col3: int 15 7 19 ...
+  ```
 
 ## Análisis exploratorio de datos: univariado
 
@@ -59,7 +72,16 @@
 ## Representación gráfica: cualitativas
 
 * Barras: categóricas y discretas
+
+  ```R
+  barplot(datos)
+  ```
+
 * Circular o sectores: nominales u ordinales
+
+  ```R
+  pie(datos)
+  ```
 
 ## Tablas de frecuencias para variables cualitativas
 
@@ -72,6 +94,17 @@
   | Excelente    | 74                 | 0.296                     | 29.6%      | 74            | 0.296        |
   | Bueno        | 58                 | 0.232                     | 23.2%      | 132           | 0.528        |
   | ...          | ...                | ...                       | ...        | ...           | ...          |
+
+  ```R
+  table(datos)
+
+  100 200 250 600
+    1   2   1   1   # fi
+
+  prop.table(table(datos))
+  100 200 250 600
+  0.2 0.4 0.2 0.2   # hi
+  ```
 
 ## Representación gráfica: cuantitativas
 
@@ -90,21 +123,29 @@
     | [c, d) | 2  | 2/6 | 2/6/(d-c)  |
     | [e, f) | 1  | 1/6 | 1/6/(f-e)  |
 
+    ```R
+    hist(datos, breaks=100, col = "lightblue")
+    ```
+
 * Box-plots o diagramas de caja
 
 ## Medidas resumen
 
-* **De posición**: media (cuantis), mediana (cuantis), moda (cualis, a veces para cuantis)
-* **De dispersión** (cuantis): rango, varianza, desvio, coef de variación
+* **De posición o tendencia central**: media (cuantis), mediana (cuantis), moda (cualis, a veces para cuantis)
+* **De dispersión o variabilidad** (cuantis): rango, varianza, desvio, coef de variación
 * **De asociación**: correlación (entre 2 cuantis)
 
-| Datos |
-| --    |
-| 100   |
-| 200   |
-| 200   |
-| 250   |
-| 600   |
+  | Datos |
+  | --    |
+  | 100   |
+  | 200   |
+  | 200   |
+  | 250   |
+  | 600   |
+
+  ```R
+  datos <- c(100, 200, 200, 250, 600)
+  ```
 
 ### Media (muestral) o promedio
 
@@ -112,38 +153,67 @@
 * x̄ = (x1 + x2 + ... xn) / n
 * x̄ = (100 + 200 + 200 + 250 + 600) / 5 = 270
 
+  ```R
+  mean(datos) # 270
+  ```
+
 ### Mediana (ME)
 
 * Valor que separa la muestra ordenada en dos partes
 * 100, 200, **200**, 250, 600
 
+  ```R
+  median(datos) # 200
+  ```
+
 ### Moda (MO)
 
 * Valor que se repite con mayor frecuencia en los datos
 * **200**
+  
+  ```R
+  as.numeric(names(which.max(table(x)))) # 200
+  ```
 
-### Varianza (muestral)
+### Varianza muestral (S^2)
 
 * Calcula un promedio corregido de las distancias al cuadrado respecto del promedio
 * S^2 = (1 / (n-1) ) / (x1 - x̄)^2 + (x2 - x̄)^2 + ... + (xn - x̄)^2
 * S^2 = ((100 - 270)^2 + (200 - 270)^2 + (200 - 270)^2 + (250 - 270)^2 + (600 - 270)^2) / (5 - 1)
 * S^2 = 37000
+  
+  ```R
+  var(datos) # 37000
+  ```
 
-### Desvío estándar
+### Desvío estándar (S)
 
 * S = sqrt(S^2)
 * S = sqrt(37000) = 192.35
+  
+  ```R
+  sd(datos) # 192.35
+  ```
 
 ### Rango
 
 * Cuan dispersos están los valores de esa variable
 * valor max - valor min
 * rango = 600 - 100 = 500
+  
+  ```R
+  range(datos)            # 100 600 
+  max(datos) - min(datos) # 500
+  ```
 
 ### Coef de variación
 
 * Coef de variación = desvio / media
 * Coef de variación = (192.35 / 270) = 0.7124
+
+  ```R
+  sd(datos) / mean(datos) # 0.7124
+  ```
 
 ### Otras medidas
 
@@ -154,6 +224,18 @@
 * Percentiles: es el valor de la variable que deja k% de los datos por debajo de este.
   * min---K%---Pk--------------------------------------max
 
+```R
+summary(datos)
+
+min(datos)
+quantile(datos, 0.25) # Q1
+quantile(datos, 0.50) # Q2 = ME
+quantile(datos, 0.75) # Q3
+max(datos)
+
+quantile(datos, probs = c(0.25, 0.50, 0.75))
+```
+
 ## Boxplot (diagrama caja-bigote)
 
 * Relacionado con las medidas de resumen
@@ -161,11 +243,19 @@
 * Es útil para detectar datos atípicos
 * Se puede observar la asimetría de la distribución de una variable
 * En el gráfico quedan determinadas medidas de posición
-* RI: Rango intercuartílico
+* RI (Rango intercuartílico) = Q3 - Q1
 
-| Datos muy atípicos | Datos atípicos o inusuales |            | Q1           | Q2 = Me | Q3 | Xmax       |
-| --                 | --                         | --         | --           | --      | -- | --         |
-|                    | 1.5 * R.I.                 | 1.5 * R.I. | R.I = Q3 -Q1 |         |    | 1.5 * R.I. |
+  ```R
+  RI = quantile(datos, 0.75) - quantile(datos, 0.25) # Q1
+  ```
+
+| Datos muy atípicos | Datos atípicos o inusuales |            | Q1            | Q2 = Me | Q3 | Xmax     |
+| --                 | --                         | --         | --            | --      | -- | --       |
+|                    | 1.5 * RI                   | 1.5 * RI   |               |         |    | 1.5 * RI |
+
+  ```R
+  boxplot(datos)
+  ```
 
 ## Como graficar/describir conjuntamente dos variables (cruzar variables)
 
@@ -178,6 +268,10 @@
 * Cuali-cuanti:
   * Histogramas separando por categorías / particiones
   * Box-plots separando por categorías / particiones
+
+  ```R
+  boxplot(Long ~ Genero, col = c("blue", "green", "red"))
+  ```
 
 ## Medida de asociación entre dos cuantis: Coeficiente de correlación
 
@@ -228,10 +322,16 @@
   * P(R1) = 6/10
   * P(A2|A1) = 3/9
 
-## Variables aleatorias
+## Variables aleatorias (VA)
 
 * Se definen según el interes. Ej: cartas a 1, 2, 3, 4
 * Transforma (codifica) los resultados del experimento aleatorio a número reales
+* Miran de modo numérico resultados del experimento aleatorio
+* Tengo un experimento aleatorio, a partir del experimento, miro un espacio muestral (espacio de todos los resultados posibles) y a partir del espacio muestral defino VA de interés. Ejemplo:
+  * Experimento aleatorio: elijo un crustáceo al azar en la población y registro su género (F, M, I)
+  * Aqui modelo con probabilidades. P(Gen=F) = pf
+  * Defino una variable de interés X = 1 si F, 2 si M, 3 si I
+  * A partir del modelo de probabilidades se genera una función de probabilidades para X
 * Para cada resultado del espacio muestral hace corresponder un número
 * Ejemplos:
   * X: cant de bolitas amarillas en dos extracciones. Valores discretos
@@ -241,10 +341,10 @@
 
 ## Tipos de variables aleatorias
 
-* Discretas:
-  * número de anillos
-* Continuas:
-  * longitud, diámetro, peso
+|           |          | Ejemplos                 |
+| --        | --       | --                       |
+| Discretas | **VAD**  | número de anillos        |
+| Continuas | **VAC**  | longitud, diámetro, peso |
 
 ## Variable aleatoria discreta (VAD)
 
@@ -273,9 +373,31 @@
 | **Hipergeométrica** | # éxitos en n extracciones sin reposición                      |                                                                   |
 | **Poisson**         | # éxitos ocurridos en un intervalo fijo de tiempo (o longitud) | obs # de personas que ingresa a guardia entre las 8 y las 9 hs    |
 
-### Función Distribución
+### Funciones disponibles en R
 
-* F(x) = P(X<=x)
+```R
+dxxx(x, ...)  # Función de masa de probabilidad, f(x)
+pxxx(q, ...)  # Función de distribución acumulada hasta q, F(q) = P(X<=q)
+qxxx(p, ...)  # Cuantil para el cual P(X <= q) = p
+rxxx(n, ...)  # Generador de números aleatorios.
+
+# xxx puede ser: binom, geom, hyper, pois | unif, exp, norm, t, chisq 
+```
+
+## Ejemplos de distribuciones discretas
+
+| Ejemplos binomial                                                                    | R                                                    |
+| --                                                                                   | --                                                   |
+| Calcular la prob de que hayan 3 con gripe en los 20. Se sabe que prob = 0.1 : P(X=3) | dbinom(x=3, size=20, prob=0.1)                       |
+| Calcular la prob de que haya a lo sumo 3 con gripe: P(X<=3) = F(3)                   | pbinom(q=3, size=20, prob=0.1)                       |
+| Simular la muestra de tamaño 100                                                     | rbinom(n=100, size=20, prob=0.1)                     |
+| Graficar función de probabilidades con x <- 0:20                                     | plot(x=x, y=dbinom(x=x, size=2, prob=0.1), type='h') |
+
+| Ejemplos poisson                                                                     | R                                                    |
+| --                                                                                   | --                                                   |
+| Calcular la prob de que lleguen 17. Tasa de arribos por hora = 15                    | dpois(17, 15)                                        |
+| Calcular la prob de que lleguen como max 17                                          | ppois(17, 15)                                        |
+| Graficar función de probabilidades con k <- 0:35                                     | plot(x=k, y=dpois(k, 15), type='h')                  |
 
 ## Variable aleatoria continua (VAC)
 
@@ -300,7 +422,116 @@
 | --               | --                                                                       | --                             | --                | --        | --              |
 | **Uniforme**     | se elige un punto al azar en el intervalo (0, 1)                         | 1 si 0 < x < 1; 0 otro caso    | F(x) = P(X <= x)  | (a+b)/2   | (b-a)^2 / 12    |
 | **Exponencial**  | se toma el tiempo (años) hasta que falle un artefacto. λ: tasa de fallos | f(t) = λe^(-λt)                | F(t) = P(T <= t)  | 1/λ       | 1/λ^2           |
-| **Normal/Gauss** |                                                                          | f(x) = (1 / sqrt(2π))e^-0.5x^2 | F(Z) = P(Z <= z)  | 0         |                 |
-| **T de Student** ||||||
-| **Chi-cuadrado** ||||||
+| **Normal/Gauss** | Z ~ N(μ, σ^2), donde N(0,1) por ser estandar                             | f(x) = (1 / sqrt(2π))e^-0.5x^2 | F(Z) = P(Z <= z)  | 0         | 0               |
+| **T de Student** | T ~ t(v). Asociada a una Normal y una Chi-cuadrado cociente. Acampanada  |                                |                   |           |                 |
+| **Chi-cuadrado** | X ~ χ^2(v). No es simétrico                                              |                                |                   |           |                 |
+
+## Como afecta el desvío a la Distribución Normal
+
+* El mayor desvío (mas dispersión, mas desparramo)
+* El menor desvío (mas concentración) ---> uno busca esto, ya que estaría en presencia de una variable mas precisa (valores con mas probabilidad mas cerca de la media)
+
+## Ejemplos de distribuciones continuas
+
+| Ejemplos uniforme                                                                    | R                                                    |
+| --                                                                                   | --                                                   |
+| Calcular la densidad en un punto                                                     | dunif(0.5, 0, 1)                                     |
+| Calcular la prob de que el nro elegido sea menor o igual a 0.3: P(X<=0.3)            | punif(0.3, 0, 1)                                     |
+| Calcular la prob de que el nro esté entre 0.3 y 0.5: P(0.3<X<0.5)                    | punif(0.5, 0, 1) - punif(0.3, 0, 1)                  |
+| Simular la muestra de tamaño 100                                                     | runif(100, 0, 1)                                     |
+| Graficar la densidad                                                                 | curve(dunif(0.5, 0, 1))                              |
+
+| Ejemplos exponencial                                                                 | R                                                    |
+| --                                                                                   | --                                                   |
+| Calcular la densidad en un punto. Tiempo de vida en años 0.2                         | dexp(4, rate=0.2)                                    |
+| Calcular la prob. P(T<=4)                                                            | pexp(4, 0.2, lower.tail = FALSE)                     |
+| Graficar la densidad con x <- 0:20                                                   | curve(dexp(x, rate=0.2))                             |
+
+| Ejemplos normal estandar                                                             | R                                                    |
+| --                                                                                   | --                                                   |
+| Calcular la prob. P(Z < 1)                                                           | pnorm(1, 0, 1)                                       |
+| quantil 0.9 es el valor de z que deja a la izq una prob de 0.9                       | qnorm(0.9, 0, 1)    pnom(1.281552, 0, 1)             |
+| Simular muestra aleatoria                                                            | rnorm(100, 0, 1)                                     |
+| Graficar la densidad con x <- 0:20                                                   | curve(dnorm(x, 0, 1))                                |
+| Graficar la distribución con x <- 0:20                                               | curve(pnorm(x, 0, 1))                                |
+
+| Ejemplos t de STUDENT                                                                | R                                                    |
+| --                                                                                   | --                                                   |
+| quantil 0.975 con grado de libertad 4                                                | qt(0.975, 4)                                         |
+| Graficar la densidad con x <- 0:20                                                   | curve(dt(x, 4))                                      |
+
+| Ejemplos CHI-cuadrado                                                                | R                                                    |
+| --                                                                                   | --                                                   |
+| Calcular el valor de b / P(X > b) = 0.05. 0.95 porque miro hacia izq                 | qchisq(0.95, 4)                                      |
+| Graficar la densidad con x <- 0:20                                                   | curve(dchisq(x, 4))                                  |
+
+## Inferencia estadística
+
+* Población N --> muestra representativa ---> Muestra n
+* N           <--------INFERENCIA------------ n
+
+## Tipos de Inferencias estadísticas
+
+* Estimación Puntual: dar un número
+* Intervalos de confianza
+* Pruebas de hipótesis: permiten poner a prueba afirmaciones. Será que el ... es mas que .... ?
+
+### Estimador puntual
+
+* Dada una variable X cuya distribución depende de un parámetro Θ, y dada una muestra aleatoria X1, X2, ..., Xn, un **estimador de Θ** es una variable aleatoria que sea función de la muestra y que tome valores en el conjunto de valores posibles de Θ
+* Por ejemplo, si queremos estimar la media μ de una población, utilizamos la media de una muestra: x̄
+* Si queremos estimar la proporción de voto a un candidato, usamos p = #casos de intención de votos / total de muestra
+* Para inferir sobre la media de una población, se utiliza el estimador x̄ = (x1 + x2 + ... + xn) / n
+* Si la muestra es pequeña, x̄ ~ N(μ, σ/sqrt(n))
+
+```R
+muestra_z100 <- rnorm(100, 0, 1) # elijo al azar 100 datos de una normal 
+mean(muestra_z100) # -0.009; el promedio de 100 valores esta cerca de 0 = media poblacional. Por eso se puede usar el promedio como estimador
+
+summary(estudiantes)
+mean(estudiantes$notas) # media estimada de nota = 6.516
+sd(estudiantes$notas)   # 1.28  
+var(estudiantes$nota)   # 1.64
+
+```
+
+* Otros estimadores:
+  * para inferir sobre la varianza, se utiliza el estimador S^2
+  * para inferor sobre una proporción, se utiliza la proporción muestral,  p = # éxitos en la muestra / n
+
+### Estimación por intervalo de confianza (IC)
+
+* Se busca que una estimación puntual esté acompañada de alguna medida del posible error de esa estimación
+* Esto puede hacerse indicando el error estandar del estimador o dando un intervalo que incluya al verdadero valor del parámetro con un cierto nivel de confianza
+* [LI, LS] / si el parámetro a estimar es Θ, entonces  P(LI <= Θ <= LS) = 1-α
+* 1-α se denomina **coeficiente de confianza**
+* el intervalo numérico observado se dice que tiene una confianza (1-α) de contener el verdadero valor del parámetro Θ
+
+### Ejemplo
+
+* n = 500
+* X: altura de persona de 30 años  X ~ N(μ, σ)
+* x̄ = 1.7074 m
+* S = 0.29138  (desvio muestral)
+* t es el quantil que deja en el centro 0.95  --> en R: qt(0.975, 499)  # 1.964729
+* y así se determina un IC para la verdadera altura media con una confianza del 95%
+* IC para μ : [1.6859; 1.7257]
+* Interpretación: se tiene la confianza del 95% de que el IC contiene a la altura media de los hab. de 30 años de edad de esta población
+
+## QQPLOT
+
+* Método gráfico para analizar la normalidad
+* Gráfico quantil quantil, compara quantiles de los datos observados vs quantiles de una distribución normal teórica
+* Si los puntos están alrededor de la bisectriz, podria asumirse la normalidad
   
+```R
+# se puede asumir que los datos provienen de una distribución normal
+hist(estudiantes$nota)
+
+qqnorm(estudiantes$nota)
+qqline(estudiantes$nota)
+ggplot(estudiantes, aes(sample = nota)) + geom_qq() + geom_qq_line()
+# vemos que podemos asumir normalidad para las notas
+```
+
+## llegué al minuto 20
