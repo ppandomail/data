@@ -71,3 +71,59 @@
 * [Descarga R](https://cran.r-project.org/)
 * [Descarga RStudio](https://posit.co/download/rstudio-desktop/)
 * Es un entorno de software libre para el cálculo estadístico y generación de gráficos
+
+### Manejo de datos R
+
+|                           | Sintaxis             | Ejemplos     |
+| --                        | --                   | --           |
+| Asignación                | <-                   | x <- 1       |
+| Comentarios               | #                    | # comentario |
+| Comillas                  | ""                   | "hola"       |
+| Imprimir                  | print                | print(x)     |
+| Tipo objeto               | mode                 | mode(x)      |
+| Longitud objeto           | length               | length(x)    |
+| Borrar objetos de memoria | rm                   | rm(x)        |
+| Ver objetos guardados     | ls                   | ls()         |
+| Operadores aritméticos    | +, -, *, /, ^, %%    | 4 %% 2       |
+| Funciones matemáticas     | sqrt, log, sum, prod | sum(c(2, 4)) |
+| Valores muy grandes       | Inf, -Inf            | 2^2048       |
+| Indeterminación           | NaN                  | 0/0          |
+| Operadores relacionales   | <, <=, >, >=, ==, != | 9 != 3       |
+| Operadores lógicos        | \|, &, !             | !TRUE        |
+
+### Tipos de datos R
+
+|                           | Sintaxis             | Ejemplos                                                 |
+| --                        | --                   | --                                                       |
+| Caracter                  | ""                   | str <- "Pablo"                                           |
+| Numérico                  |                      | n <- 0.5                                                 |
+| Entero                    |                      | i <- 5                                                   |
+| Complejo                  |                      | c <- 2 + 4i                                              |
+| Lógico                    | TRUE, FALSE          | b <- TRUE                                                |
+| Vector                    | c(...)               | v <- c(1, 2, 3)                                          |
+| Secuencia                 | min:max              | s <- 1:10                                                |
+| Factor                    | factor               | f <- factor(c(1, 2))                                     |
+| Matriz                    | matriz               | m <- matrix(1:6, nrow=2, ncol=3)                         |
+| Lista                     | list                 | l <- list(1:5, c('a', 'b'))                              |
+| Data frames               | data.frame           | df<- data.frame(vocal=c('a', 'e', 'o'), cant=c(3, 2, 3)) |
+
+### Funciones sobre tipos
+
+|                           | Sintaxis             | Ejemplos                              |
+| --                        | --                   | --                                    |
+| Tabla de frecuencias      | table                | table(c(1, 2, 1, 1, 3))               |
+| Replica elementos         | rep                  | c(rep("rojo", 2))                     |
+| Dimensiones de matriz     | dim                  | dim(matrix(nrow=2, ncol=3))           |
+| Número de filas           | nrow                 | nrow(df)                              |
+| Número de columnas        | ncol                 | ncol(df)                              |
+| Nombre de filas           | rownames             | rownames(df)                          |
+| Nombre de columnas        | colnames             | colnames(df)                          |
+| Atributos de un objeto    | attributes           | attributes(df)                        |
+| Extraer elementos         | [], $                | v[1]; v[c(1, 2, 3)]; v[1:3]; df$vocal |
+| Filtro en dataframe       | subset               | subset(df, vocal=="a")                |
+| in                        | %in%                 | subset(df, vocal %in% c("a", "o"))    |
+| Coerción a numérico       | as.numeric           | as.numeric(c('1.5', '3.2'))           |
+| Coerción a caracter       | as.character         | as.character(c(1, 3))                 |
+| Coerción a entero         | as.integer           | as.integer(c('1', '3'))               |
+| Coerción a lógico         | as.logical           | as.logical(c(0, 1, 2)) # 0:FALSE      |
+| Coerción a factor         | as.factor            | as.factor(c("a", "b", "a", "a"))      |

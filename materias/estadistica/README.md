@@ -65,7 +65,7 @@
 
 ## Análisis exploratorio de datos: univariado
 
-* gráficos: circulares o sectores, barras, histogramas, box-plot, etc
+* gráficos: circulares, barras, histogramas, boxplot, etc
 * tablas: frecuencias, etc.
 * medidas resumen: media, mediana, moda, desvío, mínimo, percentiles, etc.
 
@@ -109,7 +109,7 @@
 ## Representación gráfica: cuantitativas
 
 * Histogramas:
-  * se usan para variables con un amplio dominio
+  * se usan para variables con un amplio dominio (continuas)
   * permite ver esquemas de comportamientos que son dificiles de ver en una tabla numérica
   * se busca que el área total bajo el histograma sea igual a 1, porque puede servir para estimar algo de la variable aleatoria que hay atrás
   * se grafica fi/n/amplitud del intervalo Ci
@@ -263,10 +263,10 @@ quantile(datos, probs = c(0.25, 0.50, 0.75))
   * tablas cruzadas
   * sectores separando por categorias / particiones
   * mosaicos
-* Si las dos son cuantitativas:
+* Si las dos son cuantitativas (continuas):
   * Gráficos de dispersión
 * Cuali-cuanti:
-  * Histogramas separando por categorías / particiones
+  * Histogramas separando por categorías / particiones (sobre todo para las continuas)
   * Box-plots separando por categorías / particiones
 
   ```R
@@ -518,20 +518,100 @@ var(estudiantes$nota)   # 1.64
 * IC para μ : [1.6859; 1.7257]
 * Interpretación: se tiene la confianza del 95% de que el IC contiene a la altura media de los hab. de 30 años de edad de esta población
 
+  ```R
+  ic <- t.test(x = estudiantes$nota, conf.level = 0.95)
+  ic$conf.int
+  ic$estimate
+  ```
+
 ## QQPLOT
 
 * Método gráfico para analizar la normalidad
 * Gráfico quantil quantil, compara quantiles de los datos observados vs quantiles de una distribución normal teórica
 * Si los puntos están alrededor de la bisectriz, podria asumirse la normalidad
   
-```R
-# se puede asumir que los datos provienen de una distribución normal
-hist(estudiantes$nota)
+  ```R
+  # se puede asumir que los datos provienen de una distribución normal
+  hist(estudiantes$nota)
 
-qqnorm(estudiantes$nota)
-qqline(estudiantes$nota)
-ggplot(estudiantes, aes(sample = nota)) + geom_qq() + geom_qq_line()
-# vemos que podemos asumir normalidad para las notas
-```
+  qqnorm(estudiantes$nota)
+  qqline(estudiantes$nota)
+  ggplot(estudiantes, aes(sample = nota)) + geom_qq() + geom_qq_line()
+  # vemos que podemos asumir normalidad para las notas
+  ```
 
-## llegué al minuto 20
+## Tests o pruebas de hipótesis
+
+* Es pensar en afirmaciones acerca de la población sobre las cuales nosotros querramos decidir
+* Es uno de los pasos/formas de hacer inferencia
+* Estimar un valor o encontrar un intervalo de confianza y decidir si este valor cumple alguna condición
+
+### Ejemplo de juguete
+
+* Se tiene interés en el tiempo medio para embalar un producto. El objetivo es que este sea de 10 minutos, por lo que el encargado de planta debe controlarlo. Como hace ese control? Como decide?
+* Tiempo medio es rápido?
+* Tiempo medio es lento?
+* Esto se hace mirando datos (tomando muestras en diferentes horarios, diferentes operarios, etc. )
+* Cuestión: que mirar de los datos...
+
+### Organizando el problema
+
+* Defino la variable de interés =>  X: tiempo de embalado (en min)
+* Qué sabemos de X? nos informan que es una V.A. Normal pero no sabemos su media. Se sabe su desvío es 3 minutos
+* Estamos interesados en saber si mu = 10 ó mu != 10 SON LAS HIPOTESIS
+* Cómo decidimos? CON DATOS!
+* Tomamos una muestra aleatoria de tamaño n y consideramos la variable promedio (porque sabemos que estima la media, ya que la media de la muestra = promedio)
+
+### Análisis
+
+* x̄ / (σ / sqrt(n)) ~ N(0,1)
+  * Si el promedio estandarizado está cerca de 0 entonces el promedio esta cerca de 10
+  * Si el promedio estandarizado está lejos de 0 entonces digo que mu != 10
+
+### Test de hipótesis
+
+* Se quiere decidir acerca de dos afirmaciones:
+  * **Ho** vs **H1** (hipótesis de interes a controlar)
+  * Ho: mu = 10
+  * H1: mu != 10
+* Hay pruebas de distinto tipo:
+  * Acerca de un parámetro (media, varianza, proporción, etc.)
+  * Acerca de una distribución (normal, binomial, etc.)
+  * Acerca de comparación en dos o más poblaciones
+  * Etc
+* Se requiere construir una regla de decisión a partir de observar la muestra y luego tomaremos una decisión en base a la muestra observada
+* El planteo será siempre: ¿Hay suficiente evidencia para **rechazar Ho**?
+
+### Riesgos o errores en un ensayo de hipótesis
+
+| Realidad        | NO rechazo Ho | Rechazar Ho  |
+| --              | --            | --           |
+| Ho es verdadera | OK            | Error tipo 1 |
+| Ho es falsa     | Error tipo 2  | OK           |
+
+* Error tipo 1: riesgo a controlar es P(error tipo 1)
+* Nivel de significación del test = max P(rechazar Ho / Ho es V) = max P(error tipo 1)
+  * Decir que mu es 10 cuando no era 10
+
+### P-valor: otra forma de decidir
+
+* Zobs = (x̄obs - mu) / (σ / sqrt(n))
+* pvalor = 2*P(Z > Zobs)  alto!!! Refuerza la idea de NO rechazar Ho
+  * pvalor tendiendo a 0 da evidencia a rechazar Ho => para ir por H1 (que es lo que queremos)
+  * pvalor tendiendo a 1 no hay evidencia a rechazar
+
+### Estadístico de prueba
+
+* Varianza conocida (será la ~ N)
+* Varianza desconocida (será la ~ t)
+
+### Pasos
+
+1. Plantear la hipótesis nula y alternativa (Ho y H1)
+2. Revisar si la variable puede considerarse con distribución Normal
+3. n?
+4. Estadistico de prueba
+5. Establecer nivel de significación del test y la regla de decisión (regiones de rechazo y no rechazo)
+6. Calcular el valor del estadístico observado y el pvalor
+7. Analizar el p-valor
+8. Decidir expresando "bien" las conclusiones

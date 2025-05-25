@@ -1,21 +1,16 @@
-## Clase 2 de Fundamentos de Estadística 2025
-## SP
-## Tema: Variables aleatorias
+# Variables aleatorias
 
-### Borro el ambiente de trabajo
+# Borro el ambiente de trabajo
 rm(list=ls())
 
-### Seteo el directorio de trabajo
-
-### VARIABLES ALEATORIAS ####
+# VARIABLES ALEATORIAS
 # Para cada distribución:
 # dxxx(x, ...)  # Función de masa de probabilidad, f(x) para VAC ó P(X=x) para VAD
 # pxxx(q, ...)  # Función de distribución acumulada hasta q, F(q) = P(X<=q)
 # qxxx(p, ...)  # Cuantil para el cual P(X <= q) = p
 # rxxx(n, ...)  # Generador de números aleatorios
 
-######################################################
-### VARIABLES ALEATORIAS DISCRETAS ####
+# VARIABLES ALEATORIAS DISCRETAS
 # DISTRIBUCIONES DISCRETAS IMPORTANTES
 # binom     # Binomial
 # geom      # Geométrica
@@ -47,7 +42,6 @@ table(muestraB)
 # la tabla de frecuencias relativas de los datos simulados:
 prop.table(table(muestraB))  
 
-
 #####  EJEMPLO GEOMETRICA ######
 # N: cantidad de pacientes que llegaron a guardia antes del primero con gripe
 # se sabe que probab de gripe=0.1
@@ -68,7 +62,6 @@ plot(n, y=f_probabilidad_N, type='h', las=1, lwd=2,col = "red")
 muestraG <- rgeom(100, prob=0.1)
 table(muestraG)
 
-
 #####  EJEMPLO POISSON ######
 # K: cantidad de pacientes que llegaron a guardia entre las 8 y las 9
 # el parámetro es la tasa de arribos por hora =15
@@ -87,10 +80,7 @@ plot(k, y=f_probabilidad_K, type='h', las=1, lwd=2,col = "lightblue")
 
 ## Ejercicio 1 de Binomial
 
-
-
-###############################################
-### VARIABLES ALEATORIAS CONTINUAS ####
+# VARIABLES ALEATORIAS CONTINUAS
 #dxxx(x, ...)  # Función de densidad de probabilidad, f(x)
 #pxxx(q, ...)  # Función de distribución acumulada hasta q, F(x)
 #qxxx(p, ...)  # Cuantil para el cual P(X <= q) = p
@@ -170,7 +160,7 @@ pnorm(1.281552, 0, 1) # da 0.9
 
 ##EJERCICIO 2:
 # Calcular la probabilidad : P(-1 < Z < 1)
- 
+
 # Calcular la probabilidad : P(-2 < Z < 2)
 
 # Calcular la probabilidad : P(-3 < Z < 3)
@@ -218,8 +208,6 @@ curve(dnorm(x, 0,1), lwd=2, las=1, , from=-5, to=5, col= 'red',add=T )
 
 # EJERCICIO 4
 # hallar el valor de a tal que P(-a<T<a) = 0.9 con T ~ t(g.l.=10)
-
-
 
 ##### EJEMPLO DISTRIBUCION CHI-cuadrado ######
 # X con distribución: X ~ chi2(g.l.=v) 
