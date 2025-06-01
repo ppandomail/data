@@ -127,3 +127,106 @@
 | Coerción a entero         | as.integer           | as.integer(c('1', '3'))               |
 | Coerción a lógico         | as.logical           | as.logical(c(0, 1, 2)) # 0:FALSE      |
 | Coerción a factor         | as.factor            | as.factor(c("a", "b", "a", "a"))      |
+
+### Importar e exportar datos
+
+|                           | Sintaxis             | Ejemplos                                           |
+| --                        | --                   | --                                                 |
+| Obtener directorio trabajo| getwd()              | getwd()                                            |
+| Setear directorio trabajo | setwd(...)           | setwd("c:/....")                                   |
+| Importar básico           | read.table(...)      | df <- read.table("arch.csv", sep=";", header=TRUE) |
+| Imp desde CSV             | read.csv(...)        | df <- read.csv("arch.csv", sep=";")                |
+| Imp desde Excel [openxlsx]| read.xlsx(...)       | df <- read.xlsx("arch.xlsx")                       |
+| Verificar importacion     | head(...)            | head(df)                                           |
+| Exportar básico           | write.table(...)     | write.table(x=df, file="xxx.csv", sep=";")         |
+| Exp a CSV (sep por ",")   | write.csv(...)       | write.csv(x=df, file="xxx.csv")                    |
+| Exp a CSV (sep por ";")   | write.csv2(...)      | write.csv2(x=df, file="xxx.csv")                   |
+| Expo a Excel              | write.xlsx(...)      | write.xlsx(x=df, file="xxx.xlsx", rowNames=FALSE)  |
+
+### Transformar datos
+
+|                           | Sintaxis             | Ejemplos                                                          |
+| --                        | --                   | --                                                                |
+| f(x, y)                   | x %>% f(.,y)         | x <- 1:4; x %>% sum %>% sqrt # sqrt(sum(x))                       |
+| Seleccionar var [dplyr]   | select               | df <- df %>% select(v1, v2, v3)                                   |
+| Filtrar datos   [dplyr]   | filter               | df <- df %>% filter(v1 %in% c["a", "b"] & v3 > 10)                |
+| Filtrar sin NA            | filter               | df %>% filter(complete.cases(v2))                                 |
+| Modificar df    [dplyr]   | mutate               | df <- df %>% mutate(v4 = v2*100)                                  |
+| Ordenar datos   [dplyr]   | arrange              | df <- df %>% arrange(desc(v2))                                    |
+| Calcul posagrupar [dplyr] | summarize            | df <- df %>% group_by(v1) %>% summarize(v= min(v2))               |
+| Columnas a 1 col  [tidyr] | pivot_long           |                                                                   |
+|                           | pivot_wider          |                                                                   |
+| Separa 1 col en n cols    | separatte            | separate(df[, c("v1", "v2")], col="v2", c("v21", "v22"), sep=",") |
+| Une n cols en 1 col       | unitte               | unitte(df[, c("v1", "v2")], col="v1v2")                           |
+| Unir tablas               | joins                | left_join(df, df2, by="v1")                                       |
+
+### Funciones
+
+|                           | Sintaxis             | Ejemplos                                                          |
+| --                        | --                   | --                                                                |
+| Mínimo                    | min()                | min(v1)                                                           |
+| Máximo                    | max()                | max(v1)                                                           |
+| Promedio                  | mean()               | mean(v1)                                                          |
+| Mediana                   | median()             | median(v1)  # Valor que separa la muestra ordenada en dos partes  |
+| Varianza                  | var()                | var(v1)                                                           |
+| Desvío                    | sd()                 | sd(v1)                                                            |
+| Quantiles                 | quantile()           | quantile(v1, 0.25)  # Q1: 0.25  Q2: 0.50   Q3: 0.75               |
+| Datos Resumen             | summary()            | summary(v1)                                                       |
+
+### BD en R
+
+|                           | Sintaxis             | Ejemplos                                                          |
+| --                        | --                   | --                                                                |
+| gapminder [gapminder]     |                      | df <- gapminder::gapminder                                        |
+| arquality                 |                      | df <- airquality                                                  |
+
+### Estructuras de control y Funciones en R
+
+|                           | Sintaxis             | Ejemplos                                                          |
+| --                        | --                   | --                                                                |
+| IF                        | if (cond) {} else {} | if (x == 2) { y <- 3 } else { y <- 4 }                            |
+| IFELSE                    | ifelse (cond, V, F)  | ifelse(x == 1, "x es igual a 1", "x es distinto de 1")            |
+| FOR                       | for (rango) {}       | for (i in 1:5) { print(i) }                                       |
+| WHILE                     | while (cond) {}      | cont <- 0; while (cont < 10) { print(cont); cont <- cont + 2; }   |
+| FUNCTION                  | function(...) {}     | s <- function(x=1, y=1) { return (x+y) }; print(s(3)); print(s()) |
+
+### Imputación de datos faltantes
+
+|                                   | Sintaxis             | Ejemplos                                                                             |
+| --                                | --                   | --                                                                                   |
+|                                   | aggr(...)            | aggr(df, numbers=T, sortVar=T)                                                       |
+| Reemplazar NA por la media [mice] | mice()               | df <- mice(db[, names(df) %in% c("v1", "v2")], m=1, maxit=1, method="mean", print=F) |
+| Completar datos                   | complete(...)        | df <- complete(df)                                                                   |
+
+### Visualización
+
+|                                   | Sintaxis             | Ejemplos                                                                             |
+| --                                | --                   | --                                                                                   |
+| Histograma                        | hist(...)            | hist(df, breaks=15, col=NA, border="blue", main="", xlab="", ylab="")                |
+| Histograma              [ggplot2] | geom_histogram()     | ggplot(df, aes("leyenda para x")) + geom_histogram()                                 |
+| Histograma con color    [ggplot2] | geom_histogram()     | ggplot(df, aes("leyenda para x")) + geom_histogram(colour="green", fill="white")     |
+| XY                                | xyplot(...)          | xyplot(df, v1~v2)                                                                    |
+| Esquema del gráfico     [ggplot2] | ggplot(...)          | ggplot(df, aes(x=v1, y=v2, color = v3)) # df %>% ggplot(aes(...))                    |
+| Esquema del gráfico     [ggplot2] | ggplot(...)          | ggplot(df, aes(x=v1, y=v2, shape = v3))                                              |
+| Esquema del gráfico     [ggplot2] | ggplot(...)          | ggplot(df, aes(x=v1, y=v2, alpha = v3)) # escala de grises                           |
+| Objetos geométricos     [ggplot2] | geom_point()         | ggplot(df, aes(x=v1, y=v2, color = v3)) + geom_point()                               |
+| Puntos fluctuantes      [ggplot2] | geom_jitter()        | ggplot(df, aes(x=v1, y=v2)) + geom_jitter()                                          |
+| Configuración colores   [ggplot2] | scale_color_manual() | ... + scale_color_manual(values = c("red", "blue", "green", "orange"))               |
+| Línea de tendencia      [ggplot2] | geom_smooth()        | ... + geom_smooth()                                                                  |
+| Etiquetas en los puntos [ggplot2] | geom_text()          | ... + geom_text(aes(label(...), size=3, hjust=0.5), vjust=1.2)                       |
+| Facets (grf en niveles) [ggplot2] | facet_wrap()         | ... + facet_wrap(~ factor)                                                           |
+| Temas (apariencia)      [ggplot2] | theme_xxx()          | ... + theme_bw()  # theme_ [light \| classic \| dark \| gray \| linedraw] ()         |
+| Título                  [ggplot2] | ggtitle()            | ... + ggtitle("Un título")                                                           |
+| Estadisticas            [ggplot2] | stat_summary()       | ... + stat_summary(fun=mean, geom="point", size=2)                                   |
+| Barras                  [ggplot2] | geom_bar()           | ... + geom_bar()                                                                     |
+| Barras con color        [ggplot2] | geom_bar()           | ... + geom_bar(color="purple", fill="#69b3a2")                                       |
+| Barras agrupadas        [ggplot2] | geom_bar()           | ... + geom_bar(position="dodge")                                                     |
+| Barras encolumnadas     [ggplot2] | geom_col()           | ... + geom_col(position="fill")                                                      |
+| Mosaico                [ggmosaic] | geom_mosaic()        | ... + geom_mosaic(aes(x=product(Cilindrada), fill=Marca), show.legend=FALSE)         |
+| Boxplot                 [ggplot2] | geom_boxplot()       | ... + geom_boxplot()                                                                 |
+| Boxplot                 [ggplot2] | geom_boxplot()       | ggplot(df, aes(x=v1, y=v2, fill=as.factor(v3))) + geom_boxplo()                      |
+| Matriz correlación   [ggcorrplot] | ggcorrplot()         | corr <- round(cor(df), 2); ggcorrplot(corr)                                          |
+| Mapa de calor           [ggplot2] | heatmap()            | heatmap(as.matrix(df))                                                               |
+| Gráfico interactivo      [plotly] | ggplotly()           | ggplotly(gglot(df, aes(x=v1, y=v2)))                                                 |
+| Gráfico animado       [gganimate] | animate()            | animate(ggplot(df), nframes=200, fps=10, render=gifsy_renderer("gganim.gif"))        |
+| Gráfico de nubes     [wordcloud2] | wordcloud2()         | wordcloud2(df, size=.2, shape="circle")                                              |

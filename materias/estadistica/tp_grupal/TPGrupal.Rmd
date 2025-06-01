@@ -1,0 +1,204 @@
+---
+title: "Trabajo Práctico Final"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    code_folding: show
+    df_print: paged
+    theme: united
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{css echo=FALSE}
+.badCode {
+background-color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE, 
+                      message = FALSE, 
+                      eval = TRUE, 
+                      fig.width = 6, 
+                      fig.height = 4, 
+                      fig.align = "center", 
+                      class.source = "badCode") 
+options(width = 90)
+```
+
+<br> <br>
+
+|                 |                                                                             |
+|-----------------|---------------------------------------------------------------------------- |
+| **Universidad** | Universidad Nacional del Oeste                                              |
+| **Carrera**     | Esp. en Ciencia de Datos                                                    |
+| **Materia**     | Fundamentos de Estadísticas (01050)                                         |
+| **Profesora**   | Mg. Sc. Silvia N. Pérez                                                     |
+| **Alumnos**     | {Lic. Leticia, Ing. Federico, Mg. Ing. Pablo Pandolfo}                      |
+| **Fecha**       | Junio 2025                                                                  |
+|                 |                                                                             |
+
+<br> <br>
+
+## Librerias usadas
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+library(hrbrthemes)
+library(plotly)
+library(tidyr)
+library(tidyverse)
+library(scales)
+library(corrplot)
+```
+
+<br> <br>
+
+## Importación de la base de datos
+
+```{r}
+# Borramos ambiente de trabajo
+rm(list = ls())
+# Seteamos directorio de trabajo
+setwd("/Users/ppando/Materias/data/materias/estadistica/tp_grupal")
+# Cargamos datos del archivo
+datos <- read_xlsx("seguros.xlsx")
+# Verificamos cantidad de casos
+nrow(datos) > 0
+# Mostramos los primeros 6 casos
+head(datos)                                                                 
+```
+
+<br> <br>
+
+## Parte 1: análisis exploratorio
+
+<br>
+
+### a. Identificar el tipo de cada una de las variables registradas (cuali, cuanti)
+
+```{r}
+# Mostramos estructura de los datos
+str(datos)
+# cuali = {Genero, Fuma, Region}
+# cuanti = {Edad, IMC, ingreso, premio}
+```
+
+<br>
+
+### b. Decidir si hay datos faltantes, en cuyo caso eliminar los casos
+
+```{r}
+# Contamos número de nulos por variables (columnas)
+sapply(datos, function(x) sum(is.na(x)))
+
+# Eliminamos casos (filas) con nulos
+datos <- datos[!is.na(datos$Fuma),]
+
+# Otra forma: datos <- na.omit(datos)
+```
+
+<br>
+
+### c. Realizar boxplots para cada variable cuantitativa, separando según la/las variables cualitativas que considere importantes 
+
+```{r}
+par(mfrow = c(2, 2))
+ggplot(datos, aes(Edad)) + geom_boxplot()
+ggplot(datos, aes(IMC)) + geom_boxplot()
+ggplot(datos, aes(ingreso)) + geom_boxplot()
+ggplot(datos, aes(premio)) + geom_boxplot()
+```
+
+<br>
+
+### d. Identificar si hay datos muy atípicos, en cuyo caso eliminar los casos
+
+```{r}
+# Detectamos datos muy atípicos en Edad
+Q1 <- quantile(datos$Edad, 0.25)
+Q3 <- quantile(datos$Edad, 0.75)
+RI <-  Q3 - Q1
+lim_izq <- Q1 - 3*RI
+lim_der <- Q3 + 3*RI
+atipicos <- datos %>% filter(Edad < lim_izq | Edad > lim_der)
+# No hay
+
+# Detectamos datos muy atípicos en IMC
+Q1 <- quantile(datos$IMC, 0.25)
+Q3 <- quantile(datos$IMC, 0.75)
+RI <-  Q3 - Q1
+lim_izq <- Q1 - 3*RI
+lim_der <- Q3 + 3*RI
+atipicos <- datos %>% filter(IMC < lim_izq | IMC > lim_der)
+# No hay
+
+# Detectamos datos muy atípicos en ingreso
+Q1 <- quantile(datos$ingreso, 0.25)
+Q3 <- quantile(datos$ingreso, 0.75)
+RI <-  Q3 - Q1
+lim_izq <- Q1 - 3*RI
+lim_der <- Q3 + 3*RI
+atipicos <- datos %>% filter(ingreso < lim_izq | ingreso > lim_der)
+# No hay
+
+# Detectamos datos muy atípicos en premio
+Q1 <- quantile(datos$premio, 0.25)
+Q3 <- quantile(datos$premio, 0.75)
+RI <-  Q3 - Q1
+lim_izq <- Q1 - 3*RI
+lim_der <- Q3 + 3*RI
+atipicos <- datos %>% filter(premio < lim_izq | premio > lim_der)
+atipicos
+
+# Lo eliminamos
+datos <- datos %>% filter(premio != max(premio))
+```
+
+<br>
+
+### e. Hallar las medidas resumen de cada variable cuantitativa, separando según lo hecho en el ítem anterior
+
+```{r}
+# Declaramos a las variables cualitativas como factor, para poder reconocer categorias
+datos$Genero <- as.factor(datos$Genero)
+datos$Fuma <- as.factor(datos$Fuma)
+datos$Region <- as.factor(datos$Region)
+
+# Mostramos medidas resumen
+summary(datos)
+```
+
+<br>
+
+### f. Calcular la correlación entre todos los pares posibles de variables numéricas
+
+```{r}
+# Calculamos la matriz de correlación que nos muestra los coeficientes de correlación entre cada para de variables. 
+datos_numericos <- datos %>% select(Edad, IMC, ingreso, premio)
+correlaciones <- cor(datos_numericos)
+correlaciones
+# Si alguna correlación está cercana a 1 o -1, significa que hay una relación fuerte (positiva
+# Valores cercanos a 
+# 1: Correlación positiva fuerte. A medida que una variable aumenta, la otra también tiende a aumentar.
+# -1: Correlación negativa fuerte. Si una variable sube, la otra tiende a bajar.
+# 0: Correlación débil o nula. No hay una relación clara entre las variables.
+
+# Definimos una paleta de colores
+colores <- colorRampPalette(c("blue", "white", "red"))(200)
+
+# Visualizamos las correlaciones mediante un mapa de calor
+corrplot(correlaciones, method = "color", col = colores, addCoef.col = "black")
+```
+
+<br>
