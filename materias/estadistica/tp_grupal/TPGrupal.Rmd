@@ -60,6 +60,9 @@ library(tidyr)
 library(tidyverse)
 library(scales)
 library(corrplot)
+library(car)
+library(nortest)
+library(tseries)
 ```
 
 <br> <br>
@@ -199,6 +202,52 @@ colores <- colorRampPalette(c("blue", "white", "red"))(200)
 
 # Visualizamos las correlaciones mediante un mapa de calor
 corrplot(correlaciones, method = "color", col = colores, addCoef.col = "black")
+```
+
+<br> <br>
+
+## Parte 2: inferencia estadística
+
+<br>
+
+### a. Realizar pruebas de comparación de medias para la variable IMC según si fuma o no
+
+```{r}
+# Verificar normalidad
+# H0: IMC sigue una distribución Normal
+# H1: IMC NO sigue una distribución Normal
+shapiro.test(datos$IMC) # para n < 50; p-valor = 0.002144 (hay evidencia de rechazar H0)
+lillie.test(datos$IMC) # p-valor = 0.1305 (NO hay evidencia para rechazar H0, es decir, no hay evidencia para decir que IMC no es normal)
+
+# Como cumple normalidad
+t.test(IMC ~ Fuma, data = datos, var.equal = TRUE)
+
+
+
+```
+
+<br>
+
+### b. Realizar pruebas de comparación de medias para la variable ingreso según género. Si considera que hay alguna hipótesis de interés a probar, según lo observado en la Parte 1, realizar el test correspondiente
+
+```{r}
+
+```
+
+<br>
+
+### c. Realizar pruebas de comparación de medias para las variables IMC, ingreso y premio según Región
+
+```{r}
+
+```
+
+<br>
+
+### d. Probar si puede asumirse independencia entre la procedencia (Región) y la condición de fumador de la persona
+
+```{r}
+
 ```
 
 <br>

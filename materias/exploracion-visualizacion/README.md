@@ -1,11 +1,7 @@
 # Exploración y Visualización de Datos
 
-* Clases de jueves de 18:30 – 21:00pm
-* [Enlace de la videollamada](https://meet.google.com/cyd-efsh-cmy)
 * Profesor: Diego Edwards Molina
-* Campus
-* Parcial al final del cuatri
-* TP grupal
+* TP individual al final del cuatrimestre
 
 ## Ciencia de Datos
 

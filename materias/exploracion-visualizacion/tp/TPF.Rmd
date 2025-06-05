@@ -350,7 +350,7 @@ ggplot(resumen, aes(x = Year, y = Total_Actualizaciones, fill = Category)) +
 En 2018, hubo un aumento significativo en las actualizaciones de
 aplicaciones debido a varios factores clave como: **avances en los
 sistemas operativos, mayor enfoque en seguridad, competencia y retención
-de usuarios** y n**uevas funcionalidades**, ya que plataformas como
+de usuarios** y **nuevas funcionalidades**, ya que plataformas como
 Instagram introdujeron características innovadoras que impulsó una ola
 de actualizaciones en aplicaciones similares.Este aumento en la
 periodicidad de actualizaciones reflejó la evolución del mercado de
@@ -474,7 +474,7 @@ ggplot(filtrado, aes(x = NMonth, y = Total_Actualizaciones, group = Category, co
 <br>
 
 ```{r}
-filtrado <- datos %>% filter(Category %in% c("FAMILY", "GAME", "HEALTH_AND_FITNESS"))
+filtrado <- datos %>% filter(Category %in% c("FAMILY", "GAME", "HEALTH_AND_FITNESS") & between(Price, 0.01, 15))
 
 # Visualizo la dispersión, mediana y posibles valores atípicos de los precios en cada categoría
 ggplot(filtrado, aes(x = Category, y = Price, fill = Category)) +
@@ -485,6 +485,15 @@ ggplot(filtrado, aes(x = Category, y = Price, fill = Category)) +
        y = "Precio",
        fill = "Categoría")
 ```
+
+::: {style="color: black; background-color: lightgray"}
+Observo lo siguiente:
+
+-   Las tres categoria tienen la misma mediana; por los que se concluye
+    que los casos estan separados de la misma manera.
+-   En la categoria GAME se observa mayor dispersion de precios que en
+    las otras categorias.\
+:::
 
 <br>
 
@@ -519,9 +528,14 @@ ggplot(filtrado, aes(x = Grupo, y = Valor, fill = Métrica)) +
 <br>
 
 ::: {style="color: black; background-color: lightgray"}
-Observo que el Grupo **Otros** tiene una cantidad mayor respecto de las
-aplicaciones de **Entretenimiento/Juego**, puedo sugerir que hay una
-diversidad más amplia en las necesidades de los adolescentes
+Observo que el Grupo **Otros** la métrica **Total_Apps** tiene una
+cantidad mayor respecto de las aplicaciones de
+**Entretenimiento/Juego**, puedo sugerir que hay una diversidad más
+amplia en las necesidades de los adolescentes.
+
+También se puede observar que la categoría **Entretenimiento/Juego**
+tiene aplicaciones de mayor tamaño, porque vemos que son menos
+aplicaciones y el valor de la métrica Total_Size es mayor.
 :::
 
 <br>

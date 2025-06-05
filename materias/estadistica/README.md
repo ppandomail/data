@@ -2,12 +2,15 @@
 
 * Prof: Mg. Silvia Pérez
 * [Email](sperez@uno.edu.ar)
-* Se usa R
 
 ## Evaluación
 
 * TP individual: conjunto de datos + preguntas sobre esos datos. Entrega: sab 24/5
 * TP grupal: integrador utilizando un conjunto de datos a elección (análisis exploratorio + informe)
+
+## ¿Qué es la estadística?
+
+* Es la rama de las matemáticas que se encarga de recopilar, organizar y analizar datos
 
 ## ¿Por qué necesitamos entender Estadística?
 
@@ -35,6 +38,26 @@
 2. Mediante inferencia --> Modelar información: modelos probabilísticos para las variables
 3. Relaciones entre variables: modelos estadísticos
 
+## Población
+
+* Es el conjunto de individuos sobre el que se va a estudiar una característica (se quiere saber algo)
+* Todos ...
+
+## Individuo
+
+* O unidad estadística, es cada uno de los elementos que componen la población
+* Cada uno de los ...
+
+## Muestra
+
+* Un conjunto representativo de la población
+* Generalmente es el grupo de individuos a quienes se le "pregunta"
+* La cantidad seleccionada es ...
+
+## Dato
+
+* Cada uno de los valores obtenidos ("respuestas")
+
 ## Variables observadas en los datos
 
 * **Variables** en columnas: edad, título, residencia, ...
@@ -49,12 +72,12 @@
 
 ## Tipos de variables
 
-* **Cualitativas o Categóricas**
-  * Nominales (sin orden): título, ciudad
-  * Ordinales (con orden): cargo
-* **Cuantitativas o Numéricas**
-  * Discretas (entero): cant de materias aprobadas
-  * Continuas (real): edad, tiempo de obtención de título
+* **Cualitativas o Categóricas**: se refieren a características o cualidades que no pueden ser medidas en números
+  * Nominales (sin orden): título, ciudad, color preferido, deporte favorito, etc.
+  * Ordinales (con orden): cargo, notas de un examen (SS, B, R, M), medallas ganadas (oro, plata, bronce), primer apellido, etc.
+* **Cuantitativas o Numéricas**: se expresa mediante un número, se pueden realizar operaciones con ellas
+  * Discretas (entero, número finito de valores): cant de materias aprobadas, número de hermanos, etc.
+  * Continuas (real, número infinito de valores): edad, tiempo de obtención de título, peso de un balón, etc.
 
   ```R
   str(datos)
@@ -149,7 +172,9 @@
 
 ### Media (muestral) o promedio
 
+* Valor obtenido al sumar todos los datos y dividir el resultado entre el número total de datos
 * Se deja influir por datos alejados o atípicos
+* x̅ = (Σ Xi) / n
 * x̄ = (x1 + x2 + ... xn) / n
 * x̄ = (100 + 200 + 200 + 250 + 600) / 5 = 270
 
@@ -160,6 +185,8 @@
 ### Mediana (ME)
 
 * Valor que separa la muestra ordenada en dos partes
+* Número de datos es impar: ordenar y seleccionar el centro
+* Número de datos es par: ordenar y sacar el promedio de los dos datos centrales
 * 100, 200, **200**, 250, 600
 
   ```R
@@ -169,6 +196,8 @@
 ### Moda (MO)
 
 * Valor que se repite con mayor frecuencia en los datos
+* Si son dos valores que mas se repiten entonces es una distribución bimodal
+* Si son mas de dos valores es una distribución multimodal
 * **200**
   
   ```R
@@ -544,41 +573,50 @@ var(estudiantes$nota)   # 1.64
 
 * Es pensar en afirmaciones acerca de la población sobre las cuales nosotros querramos decidir
 * Es uno de los pasos/formas de hacer inferencia
-* Estimar un valor o encontrar un intervalo de confianza y decidir si este valor cumple alguna condición
+* Para un parámetro (media, varianza, proporción etc.)
+* Tenemos una variable X y no conocemos uno de sus parámetros, podemos hacer inferencia:
+  * Estimando un valor
+  * Encontrando un intervalo de confianza
+  * Decidiciendo si este valor cumple alguna condición
 
 ### Ejemplo de juguete
 
-* Se tiene interés en el tiempo medio para embalar un producto. El objetivo es que este sea de 10 minutos, por lo que el encargado de planta debe controlarlo. Como hace ese control? Como decide?
+* Queremos decidir cómo es la media de una población
+* Se tiene interés en el tiempo medio para embalar un producto
+* El objetivo es que este sea de 10 minutos, por lo que el encargado de planta debe controlarlo
+* Como hace ese control? Como decide?
 * Tiempo medio es rápido?
 * Tiempo medio es lento?
+* Testear el valor medio (alrededor de qué esta el tiempo de embalaje)
 * Esto se hace mirando datos (tomando muestras en diferentes horarios, diferentes operarios, etc. )
 * Cuestión: que mirar de los datos...
 
 ### Organizando el problema
 
 * Defino la variable de interés =>  X: tiempo de embalado (en min)
-* Qué sabemos de X? nos informan que es una V.A. Normal pero no sabemos su media. Se sabe su desvío es 3 minutos
-* Estamos interesados en saber si mu = 10 ó mu != 10 SON LAS HIPOTESIS
+* Qué sabemos de X? nos informan que es una V.A. Normal pero no sabemos su media
+* Se sabe su desvío es 3 minutos
+* Estamos interesados en saber si μ = 10 ó μ != 10 SON LAS HIPOTESIS
 * Cómo decidimos? CON DATOS!
 * Tomamos una muestra aleatoria de tamaño n y consideramos la variable promedio (porque sabemos que estima la media, ya que la media de la muestra = promedio)
 
 ### Análisis
 
 * x̄ / (σ / sqrt(n)) ~ N(0,1)
-  * Si el promedio estandarizado está cerca de 0 entonces el promedio esta cerca de 10
-  * Si el promedio estandarizado está lejos de 0 entonces digo que mu != 10
+  * Si el promedio estandarizado está cerca de 0 (menos de aprox 0.10) entonces el promedio esta cerca de 10
+  * Si el promedio estandarizado está lejos de 0 entonces digo que μ != 10
 
-### Test de hipótesis
+### Test o pruebas de hipótesis
 
 * Se quiere decidir acerca de dos afirmaciones:
-  * **Ho** vs **H1** (hipótesis de interes a controlar)
-  * Ho: mu = 10
-  * H1: mu != 10
+  * **Ho** (hipótesis nula) vs **H1** (hipótesis alternativa o de interés a controlar)
+  * Ho: μ = 10
+  * H1: μ != 10
 * Hay pruebas de distinto tipo:
   * Acerca de un parámetro (media, varianza, proporción, etc.)
   * Acerca de una distribución (normal, binomial, etc.)
   * Acerca de comparación en dos o más poblaciones
-  * Etc
+  * Etc.
 * Se requiere construir una regla de decisión a partir de observar la muestra y luego tomaremos una decisión en base a la muestra observada
 * El planteo será siempre: ¿Hay suficiente evidencia para **rechazar Ho**?
 
@@ -597,8 +635,8 @@ var(estudiantes$nota)   # 1.64
 
 * Zobs = (x̄obs - mu) / (σ / sqrt(n))
 * pvalor = 2*P(Z > Zobs)  alto!!! Refuerza la idea de NO rechazar Ho
-  * pvalor tendiendo a 0 da evidencia a rechazar Ho => para ir por H1 (que es lo que queremos)
-  * pvalor tendiendo a 1 no hay evidencia a rechazar
+  * pvalor tendiendo a 0 (por debajo de 0.10) da evidencia a rechazar Ho => para ir por H1 (que es lo que queremos)
+  * pvalor tendiendo a 1 no hay evidencia a rechazar Ho
 
 ### Estadístico de prueba
 
@@ -614,4 +652,84 @@ var(estudiantes$nota)   # 1.64
 5. Establecer nivel de significación del test y la regla de decisión (regiones de rechazo y no rechazo)
 6. Calcular el valor del estadístico observado y el pvalor
 7. Analizar el p-valor
-8. Decidir expresando "bien" las conclusiones
+8. Decidir expresando "bien" las conclusiones: "Tengo evidencia para decir..." / "No tengo evidencia para decir..."
+
+## Prueba de comparación de medias
+
+* Es un método estadístico que se usa para determinar si hay un diferencia significativa entre las medias de 2 ó + grupos
+* Busca responder a la pregunta: ¿las diferencias observadas entre los grupos son reales o simplemente producto del azar?
+* Tipos de pruebas:
+  * t de student: comparar medias de 2 grupos cuando los datos siguen una ~ N() y tienen varianzas similares
+  * Wilcoxon: datos no siguen una distribución N()
+  * ANOVA: cuando hay más de 2 grupos y se quiere saber si al menos uno de ellos tiene una media diferente
+  * Kruskal-Wallis: ideal cuando los datos no son normales
+
+* Suponiendo que tengo 2 grupos de mediciones, cada una con su respectiva media: x e y
+* Desconozco el valor verdadero
+* Recurrimos al cálculo de la t experimental (texp) vs t tabulada (ttab)
+  * texp = ((x - y) / S) \* sqrt(n\*m / (n+m))
+  * n: población de muestras para obtener la media
+  * m: población de muestras para obtener la media
+  * grados de libertad = (m-1) + (n-1)
+  * S: desviación estándar combinada
+    * S = sqrt( Σ(xi - x)^2 + Σ(yi - y)^2 / grados de libertad)
+  
+* Ejemplo: se llevan a cabo 2 determinaciones de cloruro a dos botellas diferentes
+* MuestraX: {50.50, 50.71, 50.11, 50.48}; x=50.45; n=4
+* MuestraY: {49.86, 49.85, 49.86}; y=49.86; m=3
+* Indique si para un nivel de 97.5% hay diferencias significativas entre las medias de ambas botellas
+* Se calcula S; S=0.1932
+* Se calcula texp; texp=3.998
+* Con grados de libertad = 5 y con nivel de confianza 97.5% se busca en tabla y la celda tiene valor la ttab=2.571
+* SI texp > ttab "hay diferencias significativas" SINO "no hay diferencias significativas"
+* 3.998 > 2.571 entonces hay diferencias significativas entre las medias de ambas botellas
+
+## Ciencia de datos
+
+* CIENCIA DE DATOS: en el medio de ...
+  * Conocimiento del negocio (dominio)
+  * Informática y Programación (interpretar código)
+  * Matemáticas y Estadísticas
+
+## Ciclo de vida de los datos (proceso iterativo)
+
+1. Conocer negocio o dominio
+2. Conocer los datos (recolección): exactitud, completitud, oportunidad, relevancia, detalle, consistencia. SINO volver a 1
+3. Preparar los datos (limpieza, transformación)
+4. Modelado/Algoritmos (predicción, clasificación, agrupamiento, identificando patrones y tendencias). SINO volver a 3
+5. Validación/Evaluación del modelo (análisis de datos, comparando modelo obtenido vs objetivos propuestos). SINO volver a 1
+6. Despliegue (presentación de resultados)
+
+## Técnicas basadas de Minería de Datos
+
+* **Aprendizaje supervisado** (existen variables de interés)
+  * *Clasificación*
+    * Árboles de decisión
+    * Análisis discriminante
+    * Redes Bayesianas
+    * Redes Neuronales
+    * SVM (Support Vector Machine)
+  * *Regresión*:
+    * Regresión simple
+    * Regresión múltiple
+    * Regresión Poisson
+    * Ridge-Lasso
+* Aprendizaje no supervisado (no hay variable de interés)
+  * *Análisis cluster*:
+    * Cluster aglomerativo
+    * Cluster divisivo
+    * K-means
+  * *Reducción de dimensionalidad**:
+    * ACP
+    * Análisis factorial
+    * PLS
+
+## Inteligencia Artificial
+
+* ML (deep learning, supervisado, no supervisado)
+* NPL
+* Sistemas Expertos
+* Visión
+* Speech
+* Planning
+* Robotics
