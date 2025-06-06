@@ -35,15 +35,15 @@ options(width = 90)
 
 <br> <br>
 
-|                 |                                                                             |
-|-----------------|---------------------------------------------------------------------------- |
-| **Universidad** | Universidad Nacional del Oeste                                              |
-| **Carrera**     | Esp. en Ciencia de Datos                                                    |
-| **Materia**     | Fundamentos de Estadísticas (01050)                                         |
-| **Profesora**   | Mg. Sc. Silvia N. Pérez                                                     |
-| **Alumnos**     | {Lic. Leticia, Ing. Federico, Mg. Ing. Pablo Pandolfo}                      |
-| **Fecha**       | Junio 2025                                                                  |
-|                 |                                                                             |
+|  |  |
+|----------------|--------------------------------------------------------|
+| **Universidad** | Universidad Nacional del Oeste |
+| **Carrera** | Esp. en Ciencia de Datos |
+| **Materia** | Fundamentos de Estadísticas (01050) |
+| **Profesora** | Mg. Sc. Silvia N. Pérez |
+| **Alumnos** | {Lic. Leticia Sosa, Ing. Federico Czerniawski, Mg. Pablo Pandolfo} |
+| **Fecha** | Junio 2025 |
+|  |  |
 
 <br> <br>
 
@@ -76,10 +76,8 @@ rm(list = ls())
 setwd("/Users/ppando/Materias/data/materias/estadistica/tp_grupal")
 # Cargamos datos del archivo
 datos <- read_xlsx("seguros.xlsx")
-# Verificamos cantidad de casos
-nrow(datos) > 0
 # Mostramos los primeros 6 casos
-head(datos)                                                                 
+head(datos)
 ```
 
 <br> <br>
@@ -93,9 +91,15 @@ head(datos)
 ```{r}
 # Mostramos estructura de los datos
 str(datos)
-# cuali = {Genero, Fuma, Region}
-# cuanti = {Edad, IMC, ingreso, premio}
 ```
+<br>
+
+::: {style="background-color: lightgray; color: black"}
+- cualitativas nominales = {Genero, Fuma, Region}
+- cuantitativas: 
+  - discretas = {Edad}
+  - continuas = {IMC, ingreso, premio}
+:::
 
 <br>
 
@@ -108,61 +112,93 @@ sapply(datos, function(x) sum(is.na(x)))
 # Eliminamos casos (filas) con nulos
 datos <- datos[!is.na(datos$Fuma),]
 
-# Otra forma: datos <- na.omit(datos)
+# Verificamos que el caso con nulos fue eliminado
+sapply(datos, function(x) sum(is.na(x)))
 ```
 
 <br>
 
-### c. Realizar boxplots para cada variable cuantitativa, separando según la/las variables cualitativas que considere importantes 
+### c. Realizar boxplots para cada variable cuantitativa, separando según la/las variables cualitativas que considere importantes
 
 ```{r}
-par(mfrow = c(2, 2))
-ggplot(datos, aes(Edad)) + geom_boxplot()
-ggplot(datos, aes(IMC)) + geom_boxplot()
-ggplot(datos, aes(ingreso)) + geom_boxplot()
-ggplot(datos, aes(premio)) + geom_boxplot()
+seguros_long_Genero <- datos %>%
+  select(Edad, Genero, IMC, ingreso, premio) %>%
+  pivot_longer(cols = -Genero, names_to = "variable", values_to = "valor")
+
+ggplotly(
+  ggplot(seguros_long_Genero, aes(x = Genero, y = valor, fill = Genero)) +
+    geom_boxplot(alpha = 0.7) +
+    facet_wrap(~ variable, scales = "free_y") +  # Un panel por variable
+    theme_bw() +
+    theme(legend.position = "none") +
+    labs(
+      title = "Distribución de variables por Genero",
+      x = "Género",
+      y = "Valor"
+    )
+)
+
+seguros_long_Fuma <- datos %>%
+  select(Edad, IMC, Fuma, ingreso, premio) %>%
+  pivot_longer(cols = -Fuma, names_to = "variable", values_to = "valor")
+
+ggplotly(
+  ggplot(seguros_long_Fuma, aes(x = Fuma, y = valor, fill = Fuma)) +
+    geom_boxplot(alpha = 0.7) +
+    facet_wrap(~ variable, scales = "free_y") +  # Un panel por variable
+    theme_bw() +
+    theme(legend.position = "none") +
+    labs(
+      title = "Distribución de variables por Condición de Fumador",
+      x = "Fuma",
+      y = "Valor"
+    )
+)
+
+seguros_long_Region <- datos %>%
+  select(Edad, IMC, Region, ingreso, premio) %>%
+  pivot_longer(cols = -Region, names_to = "variable", values_to = "valor")
+
+ggplotly(
+  ggplot(seguros_long_Region, aes(x = Region, y = valor, fill = Region)) +
+    geom_boxplot(alpha = 0.7) +
+    facet_wrap(~ variable, scales = "free_y") +  # Un panel por variable
+    theme_bw() +
+    theme(legend.position = "none") +
+    labs(
+      title = "Distribución de variables por Region",
+      x = "Región",
+      y = "Valor"
+    )
+)
+
 ```
+
+::: {style="background-color: lightgray; color: black"}
+Se observa que las variables cuantitativas agrupadas por las distintas cualitativas presentan distribuciones similares.
+
+Además, la variable premio presenta un valor muy atípico.
+:::
 
 <br>
 
 ### d. Identificar si hay datos muy atípicos, en cuyo caso eliminar los casos
 
+::: {style="background-color: lightgray; color: black"}
+Como se concluye del análisis anterior, la variable premio presenta un valor muy atípico.
+
+Procedemos a eliminarlo.
+:::
+
+
 ```{r}
-# Detectamos datos muy atípicos en Edad
-Q1 <- quantile(datos$Edad, 0.25)
-Q3 <- quantile(datos$Edad, 0.75)
-RI <-  Q3 - Q1
-lim_izq <- Q1 - 3*RI
-lim_der <- Q3 + 3*RI
-atipicos <- datos %>% filter(Edad < lim_izq | Edad > lim_der)
-# No hay
+gplot = datos %>% filter(Genero == "femenino") %>% 
+  ggplot(mapping = aes(x=Region, y=premio, color=Fuma)) +
+  geom_point() +
+  stat_summary(fun ="mean", geom="crossbar", color="red", linewidth=0.5) + # mostramos la media
+  theme_bw() + xlab("Region") + ylab("Premio")
 
-# Detectamos datos muy atípicos en IMC
-Q1 <- quantile(datos$IMC, 0.25)
-Q3 <- quantile(datos$IMC, 0.75)
-RI <-  Q3 - Q1
-lim_izq <- Q1 - 3*RI
-lim_der <- Q3 + 3*RI
-atipicos <- datos %>% filter(IMC < lim_izq | IMC > lim_der)
-# No hay
-
-# Detectamos datos muy atípicos en ingreso
-Q1 <- quantile(datos$ingreso, 0.25)
-Q3 <- quantile(datos$ingreso, 0.75)
-RI <-  Q3 - Q1
-lim_izq <- Q1 - 3*RI
-lim_der <- Q3 + 3*RI
-atipicos <- datos %>% filter(ingreso < lim_izq | ingreso > lim_der)
-# No hay
-
-# Detectamos datos muy atípicos en premio
-Q1 <- quantile(datos$premio, 0.25)
-Q3 <- quantile(datos$premio, 0.75)
-RI <-  Q3 - Q1
-lim_izq <- Q1 - 3*RI
-lim_der <- Q3 + 3*RI
-atipicos <- datos %>% filter(premio < lim_izq | premio > lim_der)
-atipicos
+ggplotly(gplot)
 
 # Lo eliminamos
 datos <- datos %>% filter(premio != max(premio))
@@ -180,6 +216,61 @@ datos$Region <- as.factor(datos$Region)
 
 # Mostramos medidas resumen
 summary(datos)
+
+# Volvemos a mostrar graficamente las medidas resumen de las variables cuantis agrupadas por las variables cualis
+seguros_long_Genero <- datos %>%
+  select(Edad, Genero, IMC, ingreso, premio) %>%
+  pivot_longer(cols = -Genero, names_to = "variable", values_to = "valor")
+
+ggplotly(
+  ggplot(seguros_long_Genero, aes(x = Genero, y = valor, fill = Genero)) +
+    geom_boxplot(alpha = 0.7) +
+    facet_wrap(~ variable, scales = "free_y") +  # Un panel por variable
+    theme_bw() +
+    theme(legend.position = "none") +
+    labs(
+      title = "Distribución de variables por Genero",
+      x = "Género",
+      y = "Valor"
+    )
+)
+
+seguros_long_Fuma <- datos %>%
+  select(Edad, IMC, Fuma, ingreso, premio) %>%
+  pivot_longer(cols = -Fuma, names_to = "variable", values_to = "valor")
+
+ggplotly(
+  ggplot(seguros_long_Fuma, aes(x = Fuma, y = valor, fill = Fuma)) +
+    geom_boxplot(alpha = 0.7) +
+    facet_wrap(~ variable, scales = "free_y") +  # Un panel por variable
+    theme_bw() +
+    theme(legend.position = "none") +
+    labs(
+      title = "Distribución de variables por Condición de Fumador",
+      x = "Fuma",
+      y = "Valor"
+    )
+)
+
+seguros_long_Region <- datos %>%
+  select(Edad, IMC, Region, ingreso, premio) %>%
+  pivot_longer(cols = -Region, names_to = "variable", values_to = "valor")
+
+ggplotly(
+  ggplot(seguros_long_Region, aes(x = Region, y = valor, fill = Region)) +
+    geom_boxplot(alpha = 0.7) +
+    facet_wrap(~ variable, scales = "free_y") +  # Un panel por variable
+    theme_bw() +
+    theme(legend.position = "none") +
+    labs(
+      title = "Distribución de variables por Region",
+      x = "Región",
+      y = "Valor"
+    )
+)
+
+
+
 ```
 
 <br>
@@ -191,40 +282,123 @@ summary(datos)
 datos_numericos <- datos %>% select(Edad, IMC, ingreso, premio)
 correlaciones <- cor(datos_numericos)
 correlaciones
-# Si alguna correlación está cercana a 1 o -1, significa que hay una relación fuerte (positiva
-# Valores cercanos a 
-# 1: Correlación positiva fuerte. A medida que una variable aumenta, la otra también tiende a aumentar.
-# -1: Correlación negativa fuerte. Si una variable sube, la otra tiende a bajar.
-# 0: Correlación débil o nula. No hay una relación clara entre las variables.
 
 # Definimos una paleta de colores
 colores <- colorRampPalette(c("blue", "white", "red"))(200)
 
 # Visualizamos las correlaciones mediante un mapa de calor
 corrplot(correlaciones, method = "color", col = colores, addCoef.col = "black")
+
+# Visualizamos en un gráfico de dispersión la dependencia entre ingreso y premio
+gplot = datos %>% 
+  ggplot(mapping = aes(x=ingreso, y=premio, color=Genero)) +
+  geom_point() +
+  geom_smooth(formula= 'y ~ x', method = "lm", se = FALSE, color = "red") +
+  theme_bw() + xlab("Ingreso") + ylab("Premio") + ggtitle("Relación entre ingreso y premio")
+
+ggplotly(gplot)
+
+# Visualizamos en un gráfico de dispersión la dependencia entre Edad e IMC
+gplot = datos %>% 
+  ggplot(mapping = aes(x=Edad, y=IMC, color=Genero)) +
+  geom_point() +
+  geom_smooth(formula= 'y ~ x', method = "lm", se = FALSE, color = "red") +
+  theme_bw() + xlab("Edad") + ylab("IMC") + ggtitle("Relación entre Edad e IMC")
+
+ggplotly(gplot)
+
 ```
+
+::: {style="background-color: lightgray; color: black"}
+En el gráfico se muestra claramente la correlación fuerte existente entre las variables ingreso y premio.
+
+Además, las variables Edad e IMC presentan una correlación moderada.
+
+Y las variables ingreso e IMC presentan una correlación débil.
+
+El resto de las intersecciones no presentan correlaciones.
+:::
 
 <br> <br>
 
 ## Parte 2: inferencia estadística
 
+::: {style="background-color: lightgray; color: black"}
+1) Planteamos las hipótesis.
+2) Evaluamos la independencia de las muestras.
+3) Evaluamos normalidad. Se consideran las siguientes hipótesis >> H0: x es normal & H1: x no es normal
+4) Evaluamos homogeneidad de varianzas. Se consideran las siguientes hipótesis >> H0: Hay homogeneidad de varianzas & H1: No hay homogeneidad. Sirve para evitar cometer errores tipo I (falsos positivos) o tipo II (falsos negativos) y que esto afecte la validez de los resultados 
+5) Seleccionamos el estadístico de prueba según 2), 3) y 4) y hacemos la comparación
+:::
+
 <br>
 
 ### a. Realizar pruebas de comparación de medias para la variable IMC según si fuma o no
 
+::: {style="background-color: lightgray; color: black"}
+1) Planteamos las hipótesis
+- Ho -> No hay diferencias entre las medias del IMC de los grupos "Fuma = sí" y "Fuma = no".
+- H1 -> Hay diferencias entre las medias de los dos grupos.
+
+- Tamaño de la muestra: 667
+- Nivel de Significancia: 0.05
+:::
+
+
+::: {style="background-color: lightgray; color: black"}
+2) Evaluamos la independencia de las muestras.
+Considerando que:
+- Son dos grupos totalmente distintos (Fuma=Si y Fuma=No) y un caso del grupo A no puede existir en el grupo B.
+- La observación del Grupo A no puede inferir en la observación del Grupo B.
+- No hay ninguna relación aparente entre ambos grupos.
+
+Se consideran dos muestras independientes.
+:::
+
+::: {style="background-color: lightgray; color: black"}
+3) Evaluamos normalidad. Se consideran las siguientes hipótesis >> H0: x es normal & H1: x no es normal
+:::
+
 ```{r}
-# Verificar normalidad
-# H0: IMC sigue una distribución Normal
-# H1: IMC NO sigue una distribución Normal
-shapiro.test(datos$IMC) # para n < 50; p-valor = 0.002144 (hay evidencia de rechazar H0)
-lillie.test(datos$IMC) # p-valor = 0.1305 (NO hay evidencia para rechazar H0, es decir, no hay evidencia para decir que IMC no es normal)
+# Verificamos mediante un QQPlot
+gplot <- datos %>%
+  ggplot(aes(sample = IMC, color = Fuma)) +
+  geom_qq() + geom_qq_line() +
+  facet_wrap(~ Fuma) + 
+  ggtitle("QQ-plot de IMC por estado de fumador") +
+  theme_bw()
 
-# Como cumple normalidad
-t.test(IMC ~ Fuma, data = datos, var.equal = TRUE)
-
-
-
+ggplotly(gplot)
 ```
+
+::: {style="background-color: lightgray; color: black"}
+Aparentemente ambas muestras siguen una distribución normal.
+
+Verificamos con una función estadística (usamos Lilliefors porque el tamaño de la muestra es mayor a 50)
+:::
+
+```{r}
+by(data = datos, INDICES = datos$Fuma, FUN = function(x) { lillie.test(x$IMC) })
+```
+
+::: {style="background-color: lightgray; color: black"}
+p-value >= 0.05 en ambos grupos: NO hay evidencia estadística para rechazar H0, lo que indica que se puede suponer que los datos de la variable IMC siguen una distribución normal.
+
+4) Evaluamos homogeneidad de varianzas. Se consideran las siguientes hipótesis >> H0: Hay homogeneidad de varianzas & H1: No hay homogeneidad 
+:::
+
+```{r}
+bartlett.test(IMC ~ Fuma, data=datos)
+leveneTest(IMC ~ Fuma, data=dataset) # Se usa cuando no se puede asegurar la normalidad
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se observa un p-value alejado del 0.05, por lo cual no hay evidencia para rechazar H0, lo que permite suponer que hay homogeneidad de varianzas.
+
+5) Seleccionamos el estadístico de prueba según 2), 3) y 4) y hacemos la comparación
+
+Como las muestras se suponen con distribución normal y las varianzas homogéneas, se utilizará el t.test para hacer la prueba de hipótesis.
+:::
 
 <br>
 
