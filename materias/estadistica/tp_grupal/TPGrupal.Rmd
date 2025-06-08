@@ -1,6 +1,8 @@
 ---
 title: "Trabajo Práctico Final"
-output: 
+output:
+  word_document:
+    toc: true
   html_document:
     toc: true
     toc_float:
@@ -10,8 +12,10 @@ output:
     df_print: paged
     theme: united
     code_download: true
-editor_options: 
-  markdown: 
+  pdf_document:
+    toc: true
+editor_options:
+  markdown:
     wrap: 72
 ---
 
@@ -38,11 +42,12 @@ options(width = 90)
 |  |  |
 |----------------|--------------------------------------------------------|
 | **Universidad** | Universidad Nacional del Oeste |
-| **Carrera** | Esp. en Ciencia de Datos |
-| **Materia** | Fundamentos de Estadísticas (01050) |
-| **Profesora** | Mg. Sc. Silvia N. Pérez |
-| **Alumnos** | {Lic. Leticia Sosa, Ing. Federico Czerniawski, Mg. Pablo Pandolfo} |
-| **Fecha** | Junio 2025 |
+| **Carrera**     | Esp. en Ciencia de Datos |
+| **Materia**     | Fundamentos de Estadísticas (01050) |
+| **Profesora**   | Mg. Sc. Silvia N. Pérez |
+| **Grupo**       | Nº 3 |        
+| **Alumnos**     | {Lic. Leticia Sosa, Ing. Federico Czerniawski, Mg. Pablo Pandolfo} |
+| **Fecha**       | Junio 2025 |
 |  |  |
 
 <br> <br>
@@ -63,6 +68,8 @@ library(corrplot)
 library(car)
 library(nortest)
 library(tseries)
+library(knitr)
+library(vcd)
 ```
 
 <br> <br>
@@ -389,7 +396,7 @@ p-value >= 0.05 en ambos grupos: NO hay evidencia estadística para rechazar H0,
 
 ```{r}
 bartlett.test(IMC ~ Fuma, data=datos)
-leveneTest(IMC ~ Fuma, data=dataset) # Se usa cuando no se puede asegurar la normalidad
+leveneTest(IMC ~ Fuma, data=datos) # Se usa cuando no se puede asegurar la normalidad
 ```
 
 ::: {style="background-color: lightgray; color: black"}
@@ -400,28 +407,437 @@ En ambos tests se observa un p-value alejado del 0.05, por lo cual no hay eviden
 Como las muestras se suponen con distribución normal y las varianzas homogéneas, se utilizará el t.test para hacer la prueba de hipótesis.
 :::
 
+```{r}
+t.test(IMC ~ Fuma, alternative = "two.sided", mu = 0, var.equal = TRUE, data=datos) # p-value = 0.2055
+```
+
+::: {style="background-color: lightgray; color: black"}
+Como se pueden considerar ambas muestras con distribución normal, independientes y con varianzas homogéneas, se realizó un test t de Student para comparar las medias de IMC de los grupos "No fumadores" y "Fumadores".
+
+Como el p-valor está alejado y mayor del 0,05 NO hay evidencia suficiente para rechazar H0, lo que presupone que no existe una  diferencia significativa en la variación del promedio del IMC entre ambos grupos de la población.
+:::
+
 <br>
 
 ### b. Realizar pruebas de comparación de medias para la variable ingreso según género. Si considera que hay alguna hipótesis de interés a probar, según lo observado en la Parte 1, realizar el test correspondiente
 
-```{r}
+::: {style="background-color: lightgray; color: black"}
+1) Planteamos las hipótesis
+- Ho -> No hay diferencias entre las medias del ingreso de los grupos "Genero = femenino" y "Genero = masculino".
+- H1 -> Hay diferencias entre las medias de los dos grupos.
 
+- Tamaño de la muestra: 667
+- Nivel de Significancia: 0.05
+:::
+
+
+::: {style="background-color: lightgray; color: black"}
+2) Evaluamos la independencia de las muestras.
+Considerando que:
+- Son dos grupos totalmente distintos (Genero = "femenino" y Genero = "masculino") y un caso del grupo A no puede existir en el grupo B.
+- La observación del Grupo A no puede inferir en la observación del Grupo B.
+- No hay ninguna relación aparente entre ambos grupos.
+
+Se consideran dos muestras independientes.
+:::
+
+::: {style="background-color: lightgray; color: black"}
+3) Evaluamos normalidad. Se consideran las siguientes hipótesis >> H0: x es normal & H1: x no es normal
+:::
+
+```{r}
+# Verificamos mediante un QQPlot
+gplot <- datos %>%
+  ggplot(aes(sample = ingreso, color = Genero)) +
+  geom_qq() + geom_qq_line() +
+  facet_wrap(~ Genero) + 
+  ggtitle("QQ-plot de ingreso por Género") +
+  theme_bw()
+
+ggplotly(gplot)
+```
+
+::: {style="background-color: lightgray; color: black"}
+Aparentemente ambas muestras siguen una distribución normal.
+
+Verificamos con una función estadística (usamos Lilliefors porque el tamaño de la muestra es mayor a 50)
+:::
+
+```{r}
+by(data = datos, INDICES = datos$Genero, FUN = function(x) { lillie.test(x$ingreso) })
+```
+
+::: {style="background-color: lightgray; color: black"}
+p-value >= 0.05 en ambos grupos: NO hay evidencia estadística para rechazar H0, lo que indica que se puede suponer que los datos de la variable ingreso siguen una distribución normal cuando la agrupamos por Genero
+
+4) Evaluamos homogeneidad de varianzas. Se consideran las siguientes hipótesis >> H0: Hay homogeneidad de varianzas & H1: No hay homogeneidad 
+:::
+
+```{r}
+bartlett.test(ingreso ~ Genero, data=datos)
+leveneTest(ingreso ~ Genero, data=datos) # Se usa cuando no se puede asegurar la normalidad
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se observa un p-value menor al 0.05, por lo cual se rechaza H0, que se interpreta que las varianzas no son homogéneas.
+
+5) Seleccionamos el estadístico de prueba según 2), 3) y 4) y hacemos la comparación
+
+Como las muestras se suponen con distribución normal y las varianzas heterogénas, se utilizará el test de Welch para hacer la prueba de hipótesis.
+:::
+
+```{r}
+oneway.test(ingreso ~ Genero, data=datos)
+t.test(ingreso ~ Genero, alternative = "two.sided", mu = 0, var.equal = FALSE, data=datos)
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos test se obtuvo un p-valor muy pequeño lo que indica que se rechaza H0, por lo tanto se puede decir que, estadísticamente, la media poblacional de ingresos entre ambos géneros es diferente.
+:::
+
+<br>
+
+```{r}
+t.test(ingreso ~ Genero, alternative = "greater", mu = 0, var.equal = FALSE, data=datos)
+```
+
+::: {style="background-color: lightgray; color: black"}
+Conclusión: Se puede observar que el p-valor = 1 por lo que se NO se rechaza la Hipótesis Nula, confirmando estadísticamente que la media poblacional de ingresos del género masculino es mayor a la media de ingresos del genero femenino.
+:::
+
+<br>
+
+
+### c. Realizar pruebas de comparación de medias para las variables IMC, ingreso y premio según Región
+
+::: {style="background-color: lightgray; color: black"}
+1) Planteamos las hipótesis en forma general
+- Ho -> No hay diferencias entre las medias de IMC, ingreso y premio por Region.
+- H1 -> Hay alguna media diferente entre las regiones.
+
+- Tamaño de la muestra: 667
+- Nivel de Significancia: 0.05
+:::
+
+
+::: {style="background-color: lightgray; color: black"}
+2) Evaluamos la independencia de las muestras.
+Considerando que:
+- Son cuatro grupos totalmente distintos y un caso de un grupo no puede existir en los otros.
+- La observación de un grupo no puede inferir en la observación de otros.
+- No hay ninguna relación aparente entre los grupos.
+
+Se consideran cuatro muestras independientes.
+:::
+
+::: {style="background-color: lightgray; color: black"}
+**Ahora vamos a analizar IMC por Región**
+
+3) Evaluamos normalidad. Se consideran las siguientes hipótesis >> H0: x es normal & H1: x no es normal
+:::
+
+```{r}
+# Verificamos mediante un QQPlot
+gplot <- datos %>%
+  ggplot(aes(sample = IMC, color = Region)) +
+  geom_qq() + geom_qq_line() +
+  facet_wrap(~ Region) + 
+  ggtitle("QQ-plot de IMC por Región") +
+  theme_bw()
+
+ggplotly(gplot)
+```
+
+::: {style="background-color: lightgray; color: black"}
+Aparentemente las muestras siguen una distribución normal.
+
+Verificamos con una función estadística (usamos Lilliefors porque el tamaño de la muestra es mayor a 50)
+:::
+
+```{r}
+by(data = datos, INDICES = datos$Region, FUN = function(x) { lillie.test(x$IMC) })
+```
+
+::: {style="background-color: lightgray; color: black"}
+p-value >= 0.05 en los cuatro grupos: NO hay evidencia estadística para rechazar H0, lo que indica que se puede suponer que los datos de la variable IMC siguen una distribución normal cuando la agrupamos por Región
+
+4) Evaluamos homogeneidad de varianzas. Se consideran las siguientes hipótesis >> H0: Hay homogeneidad de varianzas & H1: No hay homogeneidad 
+:::
+
+```{r}
+bartlett.test(IMC ~ Region, data=datos)
+leveneTest(IMC ~ Region, data=datos) # Se usa cuando no se puede asegurar la normalidad
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se observa un p-value menor al 0.05, por lo cual se rechaza H0, por lo que se interpreta que las varianzas no son homogéneas.
+
+5) Seleccionamos el estadístico de prueba según 2), 3) y 4) y hacemos la comparación
+
+Como las muestras se suponen con distribución normal y las varianzas heterogénas, se utilizará el test de Welch para hacer la prueba de hipótesis.
+:::
+
+```{r}
+oneway.test(IMC ~ Region, data=datos)
+kruskal.test(IMC ~ Region, data = datos)
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se obtuvo un p-valor muy pequeño lo que indica que se rechaza H0, por lo tanto se puede decir que, estadísticamente, la media poblacional de IMC entre las regiones es diferente.
+
+Se va a utilizar una función para evaluar de a pares de regiones las medias de IMC, a fin de identificar cuales son las medias que difieren. 
+:::
+
+<br>
+
+```{r}
+comparar_dos_regiones = function(ds, nombre_variable){
+  regiones_unicas = ds %>% distinct(Region)
+  lst = as.list(as.data.frame(t(regiones_unicas)))
+  
+  pvalores_ds = data.frame(variables = character(), p_valor=character())
+  
+  formula_str <- reformulate("Region", nombre_variable)
+  
+  while(length(lst)>1){
+    region_A = as.character(lst[1])
+    
+    lst = lst[-1]
+    
+    for(region_B in lst){
+      region_B = as.character(region_B)
+      
+      working_ds = ds %>% filter(Region %in% c(region_A, region_B))
+      
+      rdo = t.test(formula_str, alternative = "two.sided", mu = 0, var.equal = FALSE, data=working_ds)
+      
+      label = paste0(region_A,"-",region_B)
+pvalores_ds = pvalores_ds %>% union(data.frame(variables=label, p_valor=as.character(rdo[["p.value"]])))
+    }
+  }
+
+  return(pvalores_ds)
+}
+
+dt = comparar_dos_regiones(datos, "IMC")
+kable(dt, caption="<center><b>Resultado Test t de Student (p-valor) - IMC cada 2 Regiones</b></center>")
+  
+```
+
+::: {style="background-color: lightgray; color: black"}
+De acuerdo al test t de Student, todos tienen los p-valores muy cercanos a 0, por lo que se rechaza H0 en todos los casos excepto para el par de regiones "nordeste-noroeste".
+
+Analizando el par "nordeste-noroeste" se puede observar que el p-valor es 0.5373, muy alto, por lo que no hay evidencia para rechazar H0 y se podria contemplar que estadísticamente la media de IMC de ambas poblaciones son iguales.
+:::
+
+<br>
+
+::: {style="background-color: lightgray; color: black"}
+**Ahora vamos a analizar ingreso por Región**
+
+3) Evaluamos normalidad. Se consideran las siguientes hipótesis >> H0: x es normal & H1: x no es normal
+:::
+
+```{r}
+# Verificamos mediante un QQPlot
+gplot <- datos %>%
+  ggplot(aes(sample = ingreso, color = Region)) +
+  geom_qq() + geom_qq_line() +
+  facet_wrap(~ Region) + 
+  ggtitle("QQ-plot de ingreso por Región") +
+  theme_bw()
+
+ggplotly(gplot)
+```
+
+::: {style="background-color: lightgray; color: black"}
+Aparentemente las muestras siguen una distribución normal.
+
+Verificamos con una función estadística (usamos Lilliefors porque el tamaño de la muestra es mayor a 50)
+:::
+
+```{r}
+by(data = datos, INDICES = datos$Region, FUN = function(x) { lillie.test(x$ingreso) })
+```
+
+::: {style="background-color: lightgray; color: black"}
+p-value >= 0.05 en los cuatro grupos: NO hay evidencia estadística para rechazar H0, lo que indica que se puede suponer que los datos de la variable ingreso siguen una distribución normal cuando la agrupamos por Región
+
+4) Evaluamos homogeneidad de varianzas. Se consideran las siguientes hipótesis >> H0: Hay homogeneidad de varianzas & H1: No hay homogeneidad 
+:::
+
+```{r}
+bartlett.test(ingreso ~ Region, data=datos)
+leveneTest(ingreso ~ Region, data=datos) # Se usa cuando no se puede asegurar la normalidad
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se observa un p-value menor al 0.05, por lo cual se rechaza H0, por lo que se interpreta que las varianzas no son homogéneas.
+
+5) Seleccionamos el estadístico de prueba según 2), 3) y 4) y hacemos la comparación
+
+Como las muestras se suponen con distribución normal y las varianzas heterogénas, se utilizará el test de Welch para hacer la prueba de hipótesis.
+:::
+
+```{r}
+oneway.test(ingreso ~ Region, data=datos)
+kruskal.test(ingreso ~ Region, data = datos)
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se obtuvo un p-valor > 0.05 lo que indica que NO hay evidencia para rechazar H0, por lo tanto se puede decir que, estadísticamente, la media poblacional de ingreso entre las regiones es similar.
+
+Se va a utilizar una función para evaluar de a pares de regiones las medias de ingreso, a fin de corroborar la conclusión anterior. 
+:::
+
+<br>
+
+```{r}
+dt = comparar_dos_regiones(datos, "ingreso")
+kable(dt, caption="<center><b>Resultado Test t de Student (p-valor) - ingreso cada 2 Regiones</b></center>")
+  
+```
+<br>
+
+::: {style="background-color: lightgray; color: black"}
+**Ahora vamos a analizar premio por Región**
+
+3) Evaluamos normalidad. Se consideran las siguientes hipótesis >> H0: x es normal & H1: x no es normal
+:::
+
+```{r}
+# Verificamos mediante un QQPlot
+gplot <- datos %>%
+  ggplot(aes(sample = premio, color = Region)) +
+  geom_qq() + geom_qq_line() +
+  facet_wrap(~ Region) + 
+  ggtitle("QQ-plot de Premio por Región") +
+  theme_bw()
+
+ggplotly(gplot)
+```
+
+::: {style="background-color: lightgray; color: black"}
+Aparentemente las muestras siguen una distribución normal.
+
+Verificamos con una función estadística (usamos Lilliefors porque el tamaño de la muestra es mayor a 50)
+:::
+
+```{r}
+by(data = datos, INDICES = datos$Region, FUN = function(x) { lillie.test(x$premio) })
+```
+
+::: {style="background-color: lightgray; color: black"}
+p-value >= 0.05 en los cuatro grupos: NO hay evidencia estadística para rechazar H0, lo que indica que se puede suponer que los datos de la variable premio siguen una distribución normal cuando la agrupamos por Región
+
+4) Evaluamos homogeneidad de varianzas. Se consideran las siguientes hipótesis >> H0: Hay homogeneidad de varianzas & H1: No hay homogeneidad 
+:::
+
+```{r}
+bartlett.test(premio ~ Region, data=datos)
+leveneTest(premio ~ Region, data=datos) # Se usa cuando no se puede asegurar la normalidad
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se observa un p-value mayor a 0.05, por lo cual NO hay evidencia para rechazar H0, por lo que se interpreta que las varianzas son homogéneas.
+
+5) Seleccionamos el estadístico de prueba según 2), 3) y 4) y hacemos la comparación
+
+Como las muestras se suponen con distribución normal, las varianzas son homogéneas y se trata de varios grupos, se utilizará el test ANOVA para hacer la prueba de hipótesis.
+:::
+
+```{r}
+anova_result <- aov(premio ~ Region, data = datos)
+summary(anova_result)
+
+oneway.test(premio ~ Region, data=datos, var.equal = TRUE) # p-value = 0.905
+```
+
+::: {style="background-color: lightgray; color: black"}
+En ambos tests se obtuvo un p-valor muy alto lo que indica que hay una fuerte evidencia para NO rechazar H0, por lo tanto se puede decir que, estadísticamente, la media poblacional de premio entre las regiones es similar.
+
+Se va a utilizar una función para evaluar de a pares de regiones las medias de premio, a fin de corroborar la conclusión anterior. 
+:::
+
+<br>
+
+```{r}
+dt = comparar_dos_regiones(datos, "premio")
+kable(dt, caption="<center><b>Resultado Test t de Student (p-valor) - Premio cada 2 Regiones</b></center>")
 ```
 
 <br>
 
-### c. Realizar pruebas de comparación de medias para las variables IMC, ingreso y premio según Región
+::: {style="background-color: lightgray; color: black"}
+Procedemos a ejecutar dos tests Post-HOC: test de Tukey y Bonferroni
+:::
+
 
 ```{r}
+intervalos = TukeyHSD(anova_result) 
+plot(intervalos) 
 
+pairwise.t.test(x = datos$premio, g = datos$Region, p.adjust.method = "bonferroni",
+                pool.sd = TRUE, paired = FALSE, alternative = "two.sided")
 ```
+::: {style="background-color: lightgray; color: black"}
+Con ambos tests corroboramos la conclusión del ANOVA
+:::
 
 <br>
 
 ### d. Probar si puede asumirse independencia entre la procedencia (Región) y la condición de fumador de la persona
 
+::: {style="background-color: lightgray; color: black"}
+Para evaluar dependencia vamos a realizar Tablas de Contingencia, que nos permiten evaluar dos variables cualitativas y buscar una relación entre ellas.
+
+Comparamos la tabla de frecuencias observadas con la tabla de frecuencias esperada (suponiendo independencia) utilizando un estadístico de prueba.
+
+1) Plantear las hipótesis:
+
+Siendo  >> X = Región & Y = Fuma
+
+- H0: X e Y son independientes.
+- H1: Hay alguna dependencia entre ellas.
+
+2) Armarmos la tabla de frecuencias
+:::
+
 ```{r}
+frecuencias = table(datos$Region, datos$Fuma)
+
+margin.table(frecuencias, 1)  
+margin.table(frecuencias, 2)
+
+prop.table(frecuencias)
+```
+
+::: {style="background-color: lightgray; color: black"}
+3) Ejecutamos la prueba de independencia, utilizando el test chi cuadrado 
+:::
+
+```{r}
+chisq.test(frecuencias, correct = F)
 
 ```
+::: {style="background-color: lightgray; color: black"}
+Conclusión: En el test de Chi cuadrado sobre la tabla de frencuencias se observa un p-valor 0.2491, es bastante mayor a 0.05, no hay evidencia para rechazar H0.
+
+Esto indicaría que estadísticamente se puede considerar que hay independencia entre ambas variables cualitativas: Region - Fuma
+
+Entonces, NO hay evidencia suficiente para afirmar que la condición de fumador dependa de la región.
+
+4) Corroborar niveles de asociación mediante el Coeficiente de Contingencia y V de Cramer
+:::
+
+```{r}
+assocstats(frecuencias)
+```
+
+::: {style="background-color: lightgray; color: black"}
+Corroborando los niveles de asociación se obtienen indices muy bajos lo que refuerza la evidencia de independencia obtenida por el test de Chi cuadrado.
+
+**FIN**
+:::
 
 <br>
