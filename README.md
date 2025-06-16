@@ -28,3 +28,5 @@
 | SAB | 22-03  | 26-04  | 7100   | [Fundamentos de Base de Datos](materias/base-datos/README.md)                        |
 | MAR | 18-03  | 22-04  | 7099   | [Fundamentos de Programación](materias/programacion/README.md)                       |
 | MAR | 06-05  | 03-06  | 1050   | [Fundamentos de Estadísticas](materias/estadistica/README.md)                        |
+| MAR | 17-06  | 09-09  | 1052   | [Modelos para el Aprendizaje Automático](materias/aprendizaje-automatico/README.md)  |
+| JUE | 31-07  | 30-09  | 7103   | [Aplicaciones del Aprendizaje Profundo](materias/aprendizaje-profundo/README.md)     |
