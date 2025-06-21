@@ -1,4 +1,46 @@
+# Variables aleatorias
 
+# Borro el ambiente de trabajo
+rm(list=ls())
+
+# VARIABLES ALEATORIAS
+# Para cada distribución:
+# dxxx(x, ...)  # Función de masa de probabilidad, f(x) para VAC ó P(X=x) para VAD
+# pxxx(q, ...)  # Función de distribución acumulada hasta q, F(q) = P(X<=q)
+# qxxx(p, ...)  # Cuantil para el cual P(X <= q) = p
+# rxxx(n, ...)  # Generador de números aleatorios
+
+# VARIABLES ALEATORIAS DISCRETAS
+# DISTRIBUCIONES DISCRETAS IMPORTANTES
+# binom     # Binomial
+# geom      # Geométrica
+# hyper     # Hipergeométrica
+# pois      # Poisson
+
+##### EJEMPLO BINOMIAL ######
+# X: cantidad de pacientes con gripe en 20 que llegaron a guardia
+# se sabe que probab de gripe=0.1
+
+#Calcular la probabilidad de que hayan 3 con gripe en los 20: P(X=3)
+dbinom(x=3, size=20, prob=0.10)
+
+#Calcular la probabilidad de que haya a lo sumo 3 con gripe: P(X<=3) = F(3)
+# esto es la función de distribución en ese valor
+pbinom(q=3, size=20, prob=0.10)
+
+# para graficar la función de probabilidades:
+x <- 0:20  # Soporte (dominio) de la variable
+f_probabilidad_X <- dbinom(x=x, size=20, prob=0.1)
+plot(x=x, y=f_probabilidad_X, type='h', las=1, lwd=5,col = "green")
+
+#simular una muestra de tamaño 100 de esta variable
+muestraB <- rbinom(n=100, size=20, prob=0.1)
+# Para resumir los valores simulados, veamos la tabla de frecuencias:
+table(muestraB)
+
+#Para comparar con las probabilidades teóricas, veamos
+# la tabla de frecuencias relativas de los datos simulados:
+prop.table(table(muestraB))  
 
 #####  EJEMPLO GEOMETRICA ######
 # N: cantidad de pacientes que llegaron a guardia antes del primero con gripe
