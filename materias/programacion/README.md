@@ -2,24 +2,14 @@
 
 * Prof. Jonatan Uran
 * [Email](jonuran@gmail.com)
-* HORARIO: Martes de 18:30 a 21:30
 * Lenguaje Python: estructura de datos + POO + complejidad
-* Libro de referencia que va a subir al campus
-* Guía de ejercicios para ir resolviendo clase a clase (tiene que subir)
-* Intencion de la materia: no programar, sino saber leer el código
+* Intención de la materia: no programar, sino saber leer el código
 
 ## Dinámica de la clase
 
 * Dividida en 2 partes:
   * Teórica sobre el lenguaje
   * Práctica "Resolución de ejercicios de la Guía"
-
-## Evaluación (ÚLTIMA CLASE)
-
-* Sincrónico NO presencial
-* Individual
-* Corregir errores y entender el código
-* Tipos de estructuras, tipos de datos que responde una función
 
 ## Python
 
@@ -43,18 +33,3 @@
 * Instalación de VSC
   * [https://code.visualstudio.com/](https://code.visualstudio.com/)
 * Crear perfil Python
-
-## Tipos de datos
-
-* Listas
-* Tuplas
-* Diccionarios
-
-## Parcial
-
-* Multiple choice, corregir fragmentos de código
-* Con nota ? SI, se aprueba con 7
-* Tiempo ? se puede extender
-* Como se entrega ? CAMPUS
-* Recuperatorio ? SI
-* Materia se aprueba con examen o con recuperatorio
