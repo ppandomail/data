@@ -1,16 +1,33 @@
+library(readxl)
 library(ggplot2)
 
-# Lectura del archivo
+# Ver las primeras filas
+library(readxl)
+datos_salud<-read_excel("L:/Mi unidad/CienciaDeDatos/EspecializacionUNO/RegresionLinealSimple/Practica/DatosSalud.xlsx")
 
-grasas<-read.csv("L:/Mi unidad/CienciaDeDatos/EspecializacionUNO/RegresionLinealSimple/Clase1/Grasas.csv", sep=";")
+# Ver las primeras filas
+head(datos_salud)
 
-# Modelo
-modelo <- lm(grasas ~ edad, data = grasas)
+# Calculo la correlacion entre variables
+cor(datos_salud)
+
+# Muestro graficamente la correlacion entre variables
+pairs(datos_salud)
+
+
+################################
+# Ajustar el modelo
+modelo <- lm(Presion ~ Edad, data = datos_salud)
 summary(modelo)
 
-# Scatter plot y recta de regresión
-plot(grasas$edad, grasas$grasas, xlab='edad', ylab='grasas')
-abline(modelo)
+# Gráficos básicos de diagnóstico
+par(mfrow = c(2, 2))
+plot(modelo)
+
+ggplot(datos_salud, aes(x = Edad, y = Presion)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE, color = "blue") +
+  theme_minimal()
 
 # Grafico residuos estandarizados vs predichos - R base
 par(mfrow = c(1, 1))
@@ -39,12 +56,11 @@ ggplot(data = data.frame(residuos = rstandard(modelo)), aes(sample = residuos)) 
        x = "Cuantiles teóricos",
        y = "Cuantiles muestrales")
 
-
 # Intervalos de confianza para los parametros
 confint(modelo)
 
 # prediccion
-nuevas.edades <- data.frame(edad = c(30,45))
+nuevas.edades <- data.frame(Edad = c(30,45))
 nuevas.edades
 
 predict(modelo, nuevas.edades)
@@ -56,7 +72,7 @@ predict(modelo, newdata=nuevas.edades, interval="confidence")
 predict(modelo, newdata=nuevas.edades, interval="prediction")
 
 # banda de prediccion
-nuevas.edades <- data.frame(edad = seq(20, 80))
+nuevas.edades <- data.frame(Edad = seq(20, 80))
 # Intervalo de confianza para la respuesta media
 ic.con <- predict(modelo, nuevas.edades, interval = 'confidence')
 # Intervalos de prediccion
@@ -67,15 +83,15 @@ nuevas.edades.pred.df<-cbind(nuevas.edades,ic.pred)
 head(nuevas.edades.con.df)
 head(nuevas.edades.pred.df)
 
-ggplot(grasas, aes(x=edad, y=grasas))+
+ggplot(datos_salud, aes(x=Edad, y=Presion))+
   geom_point()+
   geom_smooth(method=lm, formula=y~x, se=TRUE, level=0.95, col='blue', fill='pink2') +
-  geom_line(data = nuevas.edades.con.df,aes(x=edad,y=lwr), color="red", 
+  geom_line(data = nuevas.edades.con.df,aes(x=Edad,y=lwr), color="red", 
             linetype="dashed") +
-  geom_line(data = nuevas.edades.con.df,aes(x=edad,y=upr),color="red",
+  geom_line(data = nuevas.edades.con.df,aes(x=Edad,y=upr),color="red",
             linetype="dashed")+     
-  geom_line(data = nuevas.edades.pred.df,aes(x=edad,y=lwr),color="blue",
+  geom_line(data = nuevas.edades.pred.df,aes(x=Edad,y=lwr),color="blue",
             linetype="dashed")+
-  geom_line(data = nuevas.edades.pred.df,aes(x=edad,y=upr), color="blue",
+  geom_line(data = nuevas.edades.pred.df,aes(x=Edad,y=upr), color="blue",
             linetype="dashed") +
   theme_light()
